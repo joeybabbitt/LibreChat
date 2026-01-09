@@ -1,18 +1,63 @@
 version: 1.2.8
 cache: true
 
+interface:
+  title: "My LibreChat"
+  endpointsMenu: true
+
+mcpServers:
+  Time:
+    type: "stdio"
+    command: "uvx"
+    args: ["mcp-server-time"]
+    startup: false
+  
+  Filesystem:
+    type: "stdio"
+    command: "uvx"
+    args: ["mcp-server-filesystem", "/app"]
+    startup: false
+  
+  GitHub:
+    type: "stdio"
+    command: "uvx"
+    args: ["mcp-server-github"]
+    env:
+      GITHUB_TOKEN: "${GITHUB_TOKEN}"
+    startup: false
+
+fileConfig:
+  endpoints:
+    openRouter:
+      fileLimit: 10
+      fileSizeLimit: 20
+      totalSizeLimit: 50
+      supportedMimeTypes:
+        - "image/*"
+        - "application/pdf"
+        - "text/*"
+        - "application/json"
+
 endpoints:
   custom:
     - name: "OpenRouter"
-      # IMPORTANT: Use OPENROUTER_KEY, NOT OPENROUTER_API_KEY
-      # OPENROUTER_API_KEY will break your OpenAI endpoint!
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
       models:
-        default: ["anthropic/claude-sonnet-4.5", "meta-llama/llama-3-70b-instruct"]
-        fetch: true  # This will fetch all available models from OpenRouter
+        default: [
+          "anthropic/claude-sonnet-4.5",
+          "anthropic/claude-opus-4",
+          "openai/gpt-4o",
+          "openai/o1",
+          "deepseek-ai/deepseek-r1",
+          "google/gemini-2.0-flash-exp"
+        ]
+        fetch: true
       titleConvo: true
       titleModel: "anthropic/claude-sonnet-4.5"
-      # Drop the stop parameter - OpenRouter models use various stop tokens
       dropParams: ["stop"]
       modelDisplayLabel: "OpenRouter"
+      addParams:
+        anthropic-version: "2023-06-01"
+      headers:
+        anthropic-beta: "prompt-caching-2024-07-31"
