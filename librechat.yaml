@@ -1,35 +1,22 @@
 version: 1.2.8
 cache: true
 
-# ==========================================
-# INTERFACE CUSTOMIZATION
-# ==========================================
 interface:
   title: "My LibreChat"
   endpointsMenu: true
-  
-  # Enable artifacts for code, documents, visualizations
   artifacts:
     enabled: true
-    maxSize: 10000000  # 10MB max artifact size
-  
+    maxSize: 10000000
   privacyPolicy:
     externalUrl: "https://librechat.ai/privacy-policy"
     openNewTab: true
-  
   termsOfService:
     externalUrl: "https://librechat.ai/tos"
     openNewTab: true
 
-# ==========================================
-# REGISTRATION & ACCESS
-# ==========================================
 registration:
   socialLogins: ["google", "github", "discord"]
 
-# ==========================================
-# RATE LIMITING
-# ==========================================
 rateLimits:
   fileUploads:
     ipMax: 100
@@ -41,13 +28,9 @@ rateLimits:
     max: 120
     windowInMinutes: 60
 
-# ==========================================
-# FILE UPLOAD CONFIGURATION
-# ==========================================
 fileConfig:
   serverFileSizeLimit: 100
   avatarSizeLimit: 2
-  
   endpoints:
     openRouter:
       disabled: false
@@ -61,7 +44,6 @@ fileConfig:
         - "application/json"
         - "application/xml"
         - "application/zip"
-    
     default:
       disabled: false
       fileLimit: 5
@@ -72,22 +54,17 @@ fileConfig:
         - "application/pdf"
         - "text/*"
 
-# ==========================================
-# MCP SERVERS (Extended Claude Capabilities)
-# ==========================================
 mcpServers:
   Time:
     type: "stdio"
     command: "uvx"
     args: ["mcp-server-time"]
     startup: false
-  
   Filesystem:
     type: "stdio"
     command: "uvx"
     args: ["mcp-server-filesystem", "/app"]
     startup: false
-  
   GitHub:
     type: "stdio"
     command: "uvx"
@@ -96,9 +73,6 @@ mcpServers:
       GITHUB_TOKEN: "${GITHUB_TOKEN}"
     startup: false
 
-# ==========================================
-# AI ENDPOINTS
-# ==========================================
 endpoints:
   custom:
     - name: "OpenRouter"
@@ -108,18 +82,10 @@ endpoints:
         default: [
           "anthropic/claude-sonnet-4.5",
           "anthropic/claude-opus-4",
-          "anthropic/claude-3-7-sonnet-20250219",
           "openai/gpt-4o",
-          "openai/o1",
-          "openai/o1-mini",
           "deepseek-ai/deepseek-r1",
-          "deepseek-ai/deepseek-v3",
           "google/gemini-2.0-flash-exp",
-          "google/gemini-2.0-pro-exp",
-          "meta-llama/llama-3.3-70b-instruct",
-          "qwen/qwen-2.5-72b-instruct",
-          "perplexity/sonar-pro",
-          "x-ai/grok-3"
+          "meta-llama/llama-3.3-70b-instruct"
         ]
         fetch: true
       titleConvo: true
@@ -132,11 +98,8 @@ endpoints:
         anthropic-beta: "prompt-caching-2024-07-31"
       forcePrompt: false
 
-# ==========================================
-# MODEL PRESETS
-# ==========================================
 modelSpecs:
-  preset:
+  list:
     - preset_id: "coding-assistant"
       title: "💻 Coding Assistant"
       endpoint: "openRouter"
@@ -177,18 +140,6 @@ modelSpecs:
       top_p: 0.95
       max_tokens: 8000
     
-    - preset_id: "researcher"
-      title: "🔍 Research Assistant"
-      endpoint: "openRouter"
-      model: "perplexity/sonar-pro"
-      modelLabel: "Perplexity Sonar Pro"
-      promptPrefix: |
-        You are a thorough research assistant.
-        Provide well-researched, cited information.
-        Consider multiple sources and perspectives.
-      temperature: 0.5
-      max_tokens: 8000
-    
     - preset_id: "novel-writer"
       title: "📚 Novel Writer"
       endpoint: "openRouter"
@@ -196,29 +147,17 @@ modelSpecs:
       modelLabel: "Claude Opus 4"
       promptPrefix: |
         You are a skilled novelist and storyteller.
-        Create immersive, character-driven narratives with:
-        - Rich, descriptive prose
-        - Well-developed characters with distinct voices
-        - Engaging plot progression
-        - Vivid world-building
-        - Natural dialogue
-        
-        For long-form works, maintain consistency across chapters.
-        Use artifacts to present completed sections.
+        Create immersive, character-driven narratives with rich prose,
+        well-developed characters, engaging plots, and natural dialogue.
+        Use artifacts for completed sections.
       temperature: 0.85
       top_p: 0.95
       max_tokens: 16000
       presence_penalty: 0.1
       frequency_penalty: 0.1
 
-# ==========================================
-# ADDITIONAL FEATURES
-# ==========================================
 memory:
   enabled: true
-
-moderation:
-  enabled: false
 
 balance:
   enabled: true
