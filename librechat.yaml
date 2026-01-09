@@ -105,7 +105,7 @@ mcpServers:
       GITHUB_TOKEN: "${GITHUB_TOKEN}"
     startup: false
   
-   Memory/note-taking (optional - uncomment if desired)
+   # Memory/note-taking (optional - uncomment if desired)
    Memory:
      type: "stdio"
      command: "uvx"
