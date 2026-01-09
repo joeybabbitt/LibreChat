@@ -1,0 +1,18 @@
+version: 1.2.8
+cache: true
+
+endpoints:
+  custom:
+    - name: "OpenRouter"
+      # IMPORTANT: Use OPENROUTER_KEY, NOT OPENROUTER_API_KEY
+      # OPENROUTER_API_KEY will break your OpenAI endpoint!
+      apiKey: "${OPENROUTER_KEY}"
+      baseURL: "https://openrouter.ai/api/v1"
+      models:
+        default: ["anthropic/claude-sonnet-4.5", "meta-llama/llama-3-70b-instruct"]
+        fetch: true  # This will fetch all available models from OpenRouter
+      titleConvo: true
+      titleModel: "anthropic/claude-sonnet-4.5"
+      # Drop the stop parameter - OpenRouter models use various stop tokens
+      dropParams: ["stop"]
+      modelDisplayLabel: "OpenRouter"
