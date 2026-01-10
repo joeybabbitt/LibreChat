@@ -69,7 +69,7 @@ mcpServers:
 # ENDPOINTS SECTION
 # ===================================================
 endpoints:
-  # 1. Native Anthropic (Static List)
+  # 1. Native Anthropic -> MUST be a List
   anthropic:
     apiKey: "${ANTHROPIC_API_KEY}"
     promptCaching: true
@@ -78,7 +78,7 @@ endpoints:
       - "claude-3-5-haiku-latest"
     titleModel: "claude-3-5-haiku-latest"
 
-  # 2. Native Google (Static List)
+  # 2. Native Google -> MUST be a List
   google:
     apiKey: "${GOOGLE_KEY}"
     models:
@@ -88,7 +88,7 @@ endpoints:
       - "gemini-1.5-flash-latest"
     titleModel: "gemini-1.5-flash-latest"
 
-  # 3. Native OpenAI (Static List)
+  # 3. Native OpenAI -> MUST be a List
   openAI:
     apiKey: "${OPENAI_API_KEY}"
     models:
@@ -98,9 +98,8 @@ endpoints:
       - "o1-preview"
     titleModel: "gpt-4o-mini"
 
-  # 4. OpenRouter (Custom Endpoint)
-  # FIX: Object syntax required for visibility. 
-  # We re-enable 'fetch: true' because BYPASS_VALIDATION is on.
+  # 4. OpenRouter (Custom) -> MUST be an Object
+  # The log "Expected object, received array" specifically targeted this.
   custom:
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
@@ -113,7 +112,7 @@ endpoints:
           - "deepseek-ai/deepseek-r1"
           - "google/gemini-3-flash-preview"
           - "meta-llama/llama-3.3-70b-instruct"
-        fetch: true
+        fetch: false
       titleConvo: true
       titleModel: "anthropic/claude-sonnet-4.5"
       dropParams: ["stop"]
@@ -182,6 +181,6 @@ modelSpecs:
 memory:
   enabled: true
 
-# CRITICAL FIX: Disable balance to allow chatting
+# CRITICAL FIX: Balance Disabled
 balance:
   enabled: false
