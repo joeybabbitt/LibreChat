@@ -79,14 +79,13 @@ endpoints:
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
       models:
-        default: [
-          "anthropic/claude-sonnet-4.5",
-          "anthropic/claude-opus-4",
-          "openai/gpt-4o",
-          "deepseek-ai/deepseek-r1",
-          "google/gemini-2.0-flash-exp",
-          "meta-llama/llama-3.3-70b-instruct"
-        ]
+        default:
+          - "anthropic/claude-sonnet-4.5"
+          - "anthropic/claude-opus-4"
+          - "openai/gpt-4o"
+          - "deepseek-ai/deepseek-r1"
+          - "google/gemini-2.0-flash-exp"
+          - "meta-llama/llama-3.3-70b-instruct"
         fetch: true
       titleConvo: true
       titleModel: "anthropic/claude-sonnet-4.5"
@@ -100,61 +99,65 @@ endpoints:
 
 modelSpecs:
   list:
-    - preset_id: "coding-assistant"
-      title: "💻 Coding Assistant"
-      endpoint: "openRouter"
-      model: "anthropic/claude-sonnet-4.5"
-      modelLabel: "Claude Sonnet 4.5"
-      promptPrefix: |
-        You are an expert software engineer and coding assistant.
-        Provide clean, well-commented code with explanations.
-        Follow best practices and modern coding standards.
-      temperature: 0.2
-      top_p: 0.95
-      max_tokens: 8000
-      presence_penalty: 0
-      frequency_penalty: 0
+    - name: "coding-assistant"
+      label: "💻 Coding Assistant"
+      preset:
+        endpoint: "openRouter"
+        model: "anthropic/claude-sonnet-4.5"
+        modelLabel: "Claude Sonnet 4.5"
+        promptPrefix: |
+          You are an expert software engineer and coding assistant.
+          Provide clean, well-commented code with explanations.
+          Follow best practices and modern coding standards.
+        temperature: 0.2
+        top_p: 0.95
+        max_tokens: 8000
+        presence_penalty: 0
+        frequency_penalty: 0
     
-    - preset_id: "deep-reasoning"
-      title: "🧠 Deep Reasoning"
-      endpoint: "openRouter"
-      model: "deepseek-ai/deepseek-r1"
-      modelLabel: "DeepSeek R1"
-      promptPrefix: |
-        Think step-by-step through complex problems.
-        Show your reasoning process clearly.
-        Consider multiple perspectives before concluding.
-      temperature: 0.3
-      max_tokens: 8000
+    - name: "deep-reasoning"
+      label: "🧠 Deep Reasoning"
+      preset:
+        endpoint: "openRouter"
+        model: "deepseek-ai/deepseek-r1"
+        modelLabel: "DeepSeek R1"
+        promptPrefix: |
+          Think step-by-step through complex problems.
+          Show your reasoning process clearly.
+          Consider multiple perspectives before concluding.
+        temperature: 0.3
+        max_tokens: 8000
     
-    - preset_id: "creative-writer"
-      title: "✍️ Creative Writer"
-      endpoint: "openRouter"
-      model: "anthropic/claude-sonnet-4.5"
-      modelLabel: "Claude Sonnet 4.5"
-      promptPrefix: |
-        You are a creative and eloquent writer.
-        Craft engaging, vivid, and original content.
-        Use rich vocabulary and varied sentence structure.
-      temperature: 0.9
-      top_p: 0.95
-      max_tokens: 8000
+    - name: "creative-writer"
+      label: "✍️ Creative Writer"
+      preset:
+        endpoint: "openRouter"
+        model: "anthropic/claude-sonnet-4.5"
+        modelLabel: "Claude Sonnet 4.5"
+        promptPrefix: |
+          You are a creative and eloquent writer.
+          Craft engaging, vivid, and original content.
+          Use rich vocabulary and varied sentence structure.
+        temperature: 0.9
+        top_p: 0.95
+        max_tokens: 8000
     
-    - preset_id: "novel-writer"
-      title: "📚 Novel Writer"
-      endpoint: "openRouter"
-      model: "anthropic/claude-opus-4"
-      modelLabel: "Claude Opus 4"
-      promptPrefix: |
-        You are a skilled novelist and storyteller.
-        Create immersive, character-driven narratives with rich prose,
-        well-developed characters, engaging plots, and natural dialogue.
-        Use artifacts for completed sections.
-      temperature: 0.85
-      top_p: 0.95
-      max_tokens: 16000
-      presence_penalty: 0.1
-      frequency_penalty: 0.1
+    - name: "novel-writer"
+      label: "📚 Novel Writer"
+      preset:
+        endpoint: "openRouter"
+        model: "anthropic/claude-opus-4"
+        modelLabel: "Claude Opus 4"
+        promptPrefix: |
+          You are a skilled novelist and storyteller.
+          Create immersive, character-driven narratives with rich prose,
+          well-developed characters, engaging plots, and natural dialogue.
+          Use artifacts for completed sections.
+        temperature: 0.85
+        top_p: 0.95
+        max_tokens: 16000
+        presence_penalty: 0.1
+        frequency_penalty: 0.1
 
 memory:
   enabled: true
