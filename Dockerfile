@@ -47,8 +47,8 @@ RUN \
     npm prune --production; \
     npm cache clean --force
 
-#Editing per Claude - JB
-COPY librechat.yaml ./
+#Editing per Gemini - JB
+COPY librechat_production.yaml ./librechat.yaml
 
 # Node API setup
 EXPOSE 3080
