@@ -2,7 +2,7 @@ version: 1.2.8
 cache: true
 
 interface:
-  title: "Wolfe's LibreChat"
+  title: "RED ALERT"
   endpointsMenu: true
   artifacts:
     enabled: true
