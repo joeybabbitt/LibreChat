@@ -32,7 +32,7 @@ fileConfig:
   serverFileSizeLimit: 100
   avatarSizeLimit: 2
   endpoints:
-    openRouter:
+    OpenRouter:
       disabled: false
       fileLimit: 10
       fileSizeLimit: 20
@@ -102,7 +102,7 @@ modelSpecs:
     - name: "coding-assistant"
       label: "💻 Coding Assistant"
       preset:
-        endpoint: "openRouter"
+        endpoint: "OpenRouter"
         model: "anthropic/claude-sonnet-4.5"
         modelLabel: "Claude Sonnet 4.5"
         promptPrefix: |
@@ -118,7 +118,7 @@ modelSpecs:
     - name: "deep-reasoning"
       label: "🧠 Deep Reasoning"
       preset:
-        endpoint: "openRouter"
+        endpoint: "OpenRouter"
         model: "deepseek-ai/deepseek-r1"
         modelLabel: "DeepSeek R1"
         promptPrefix: |
@@ -131,7 +131,7 @@ modelSpecs:
     - name: "creative-writer"
       label: "✍️ Creative Writer"
       preset:
-        endpoint: "openRouter"
+        endpoint: "OpenRouter"
         model: "anthropic/claude-sonnet-4.5"
         modelLabel: "Claude Sonnet 4.5"
         promptPrefix: |
@@ -145,7 +145,7 @@ modelSpecs:
     - name: "novel-writer"
       label: "📚 Novel Writer"
       preset:
-        endpoint: "openRouter"
+        endpoint: "OpenRouter"
         model: "anthropic/claude-opus-4"
         modelLabel: "Claude Opus 4"
         promptPrefix: |
