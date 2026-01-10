@@ -117,13 +117,3 @@ endpoints:
       dropParams: ["stop"]
       modelDisplayLabel: "OpenRouter"
       forcePrompt: false
-
-# ===================================================
-# MODEL SPECS
-# ===================================================
-modelSpecs:
-  list:
-    - name: "coding-assistant"
-      label: "💻 Coding Assistant"
-      preset:
-        e
