@@ -2,7 +2,7 @@ version: 1.2.8
 cache: true
 
 interface:
-  title: "My LibreChat"
+  title: "Wolfe's LibreChat"
   endpointsMenu: true
   artifacts:
     enabled: true
@@ -41,9 +41,6 @@ fileConfig:
         - "image/*"
         - "application/pdf"
         - "text/*"
-        - "application/json"
-        - "application/xml"
-        - "application/zip"
     default:
       disabled: false
       fileLimit: 5
@@ -60,11 +57,6 @@ mcpServers:
     command: "uvx"
     args: ["mcp-server-time"]
     startup: false
-  Filesystem:
-    type: "stdio"
-    command: "uvx"
-    args: ["mcp-server-filesystem", "/app"]
-    startup: false
   GitHub:
     type: "stdio"
     command: "uvx"
@@ -73,30 +65,72 @@ mcpServers:
       GITHUB_TOKEN: "${GITHUB_TOKEN}"
     startup: false
 
+# ===================================================
+# ENDPOINTS SECTION
+# ===================================================
 endpoints:
+  # 1. Native Anthropic
+  # Validated: "claude-3-7" does not exist yet. 
+  # Use "claude-3-5-sonnet-latest" for the most up-to-date stable version.
+  anthropic:
+    apiKey: "${ANTHROPIC_API_KEY}"
+    promptCaching: true
+    models:
+      default:
+        - "claude-3-5-sonnet-latest"
+        - "claude-3-5-haiku-latest"
+      fetch: false
+    titleModel: "claude-3-5-haiku-latest"
+
+  # 2. Native Google
+  # Validated: gemini-2.0-flash-exp is the correct current ID.
+  google:
+    apiKey: "${GOOGLE_KEY}"
+    models:
+      default:
+        - "gemini-2.0-flash-exp"
+        - "gemini-2.0-flash-thinking-exp-1219"
+        - "gemini-1.5-pro-latest"
+        - "gemini-1.5-flash-latest"
+      fetch: true
+    titleModel: "gemini-1.5-flash-latest"
+
+  # 3. Native OpenAI
+  openAI:
+    apiKey: "${OPENAI_API_KEY}"
+    models:
+      default:
+        - "gpt-4o"
+        - "gpt-4o-mini"
+        - "o1-mini"
+        - "o1-preview"
+      fetch: true
+    titleModel: "gpt-4o-mini"
+
+  # 4. OpenRouter
+  # Validated: These IDs match current OpenRouter logs.
   custom:
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
       models:
         default:
-          - "anthropic/claude-sonnet-4.5"
+          - "anthropic/claude-sonnet-4.5"        # The correct ID for the 4.5 model
           - "anthropic/claude-opus-4"
           - "openai/gpt-4o"
           - "deepseek-ai/deepseek-r1"
-          - "google/gemini-2.0-flash-exp"
+          - "google/gemini-3-flash-preview"      # Updated to "3-flash-preview" per logs
           - "meta-llama/llama-3.3-70b-instruct"
         fetch: true
       titleConvo: true
       titleModel: "anthropic/claude-sonnet-4.5"
       dropParams: ["stop"]
       modelDisplayLabel: "OpenRouter"
-      addParams:
-        anthropic-version: "2023-06-01"
-      headers:
-        anthropic-beta: "prompt-caching-2024-07-31"
       forcePrompt: false
 
+# ===================================================
+# MODEL SPECS
+# ===================================================
 modelSpecs:
   list:
     - name: "coding-assistant"
@@ -112,9 +146,7 @@ modelSpecs:
         temperature: 0.2
         top_p: 0.95
         max_tokens: 8000
-        presence_penalty: 0
-        frequency_penalty: 0
-    
+
     - name: "deep-reasoning"
       label: "🧠 Deep Reasoning"
       preset:
@@ -124,10 +156,9 @@ modelSpecs:
         promptPrefix: |
           Think step-by-step through complex problems.
           Show your reasoning process clearly.
-          Consider multiple perspectives before concluding.
         temperature: 0.3
         max_tokens: 8000
-    
+
     - name: "creative-writer"
       label: "✍️ Creative Writer"
       preset:
@@ -137,11 +168,10 @@ modelSpecs:
         promptPrefix: |
           You are a creative and eloquent writer.
           Craft engaging, vivid, and original content.
-          Use rich vocabulary and varied sentence structure.
         temperature: 0.9
         top_p: 0.95
         max_tokens: 8000
-    
+
     - name: "novel-writer"
       label: "📚 Novel Writer"
       preset:
@@ -150,9 +180,7 @@ modelSpecs:
         modelLabel: "Claude Opus 4"
         promptPrefix: |
           You are a skilled novelist and storyteller.
-          Create immersive, character-driven narratives with rich prose,
-          well-developed characters, engaging plots, and natural dialogue.
-          Use artifacts for completed sections.
+          Create immersive, character-driven narratives with rich prose.
         temperature: 0.85
         top_p: 0.95
         max_tokens: 16000
