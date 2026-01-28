@@ -1,25 +1,12 @@
 version: 1.2.8
 cache: true
-#gemini edited
+
+# --- INTERFACE SETTINGS ---
 interface:
-  # --- ENABLE AGENTS & MARKETPLACE ---
   agents: true
   prompts: true
   marketplace:
     use: true
-
-    fileConfig:
-  endpoints:
-    default:
-      # This explicitly tells the server to allow Word docs
-      supportedMimeTypes:
-        - "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        - "application/pdf"
-        - "text/.*"
-      # Increase this if your files are large (value is in bytes)
-      fileLimit: 25485760 # 25MB
-  
-  # --- UI FEATURES ---
   artifacts: true
   modelSelect: true
   parameters: true
@@ -27,8 +14,6 @@ interface:
   presets: true
   multiConvo: true
   bookmarks: true
-
-  # --- PRIVACY & TOS ---
   privacyPolicy:
     externalUrl: 'https://librechat.ai/privacy-policy'
     openNewTab: true
@@ -36,12 +21,24 @@ interface:
     externalUrl: 'https://librechat.ai/tos'
     openNewTab: true
 
+# --- FILE & UPLOAD SETTINGS ---
+# This was indented too far in your version
+fileConfig:
+  endpoints:
+    default:
+      supportedMimeTypes:
+        - "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        - "application/pdf"
+        - "text/.*"
+      fileLimit: 25485760 # 25MB
+
+# --- USER ACCESS ---
 registration:
   registrationEnabled: false
   socialLogins: ["discord", "github", "google"]
-  # Securely pulls your email from Railway Variables
   allowedEmails: ["${ADMIN_EMAIL}"]
 
+# --- AI ENDPOINTS ---
 endpoints:
   custom:
     - name: "Anyscale"
