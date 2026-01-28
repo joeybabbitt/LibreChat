@@ -13,8 +13,10 @@ COPY --from=ghcr.io/astral-sh/uv:0.9.5-python3.12-alpine /usr/local/bin/uv /usr/
 # 3. Set your custom memory limit
 ARG NODE_MAX_OLD_SPACE_SIZE=6144
 
-RUN mkdir -p /app && chown node:node /app
-WORKDIR /app
+# Replace your existing mkdir line with this:
+RUN mkdir -p /app/data/images /app/data/uploads && \
+    ln -s /app/data/images /app/client/public/images && \
+    ln -s /app/data/uploads /app/uploads
 
 USER node
 
@@ -49,4 +51,4 @@ EXPOSE 3080
 ENV HOST=0.0.0.0
 # CMD ["npm", "run", "backend"]
 # temp change
-CMD ["sh", "-c", "npm run migrate && npm run backend"]
+CMD ["sh", "-c", "npm run migrate:agent-permissions && npm run migrate:prompt-permissions && npm run backend"]
