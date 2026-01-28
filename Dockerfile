@@ -47,4 +47,6 @@ COPY librechat_production.yaml ./librechat.yaml
 
 EXPOSE 3080
 ENV HOST=0.0.0.0
-CMD ["npm", "run", "backend"]
+# CMD ["npm", "run", "backend"]
+# temp change
+CMD ["sh", "-c", "npm run migrate:agent-permissions && npm run migrate:prompt-permissions && npm run backend"]
