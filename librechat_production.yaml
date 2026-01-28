@@ -1,0 +1,109 @@
+version: 1.2.8
+#Gemini Updated
+
+cache: true
+
+interface:
+  # UI Elements
+  modelSelect: true
+  parameters: true
+  sidePanel: true
+  prompts: true
+  bookmarks: true
+  multiConvo: true
+  agents: true
+  
+  # MCP Servers UI configuration
+  mcpServers:
+    placeholder: 'MCP Servers'
+    
+  # Privacy policy and TOS
+  privacyPolicy:
+    externalUrl: 'https://librechat.ai/privacy-policy'
+    openNewTab: true
+  termsOfService:
+    externalUrl: 'https://librechat.ai/tos'
+    openNewTab: true
+
+registration:
+  socialLogins: ["discord", "facebook", "github", "google", "openid"]
+
+endpoints:
+  custom:
+    # Anyscale
+    - name: "Anyscale"
+      apiKey: "${ANYSCALE_API_KEY}"
+      baseURL: "https://api.endpoints.anyscale.com/v1"
+      models:
+        default: ["meta-llama/Llama-2-7b-chat-hf"]
+        fetch: true
+      titleConvo: true
+      titleModel: "current_model"
+      modelDisplayLabel: "Anyscale"
+
+    # APIpie
+    - name: "APIpie"
+      apiKey: "${APIPIE_API_KEY}"
+      baseURL: "https://apipie.ai/v1/"
+      models:
+        default: 
+          - "gpt-4"
+          - "gpt-4-turbo"
+          - "gpt-3.5-turbo"
+          - "claude-3-opus"
+          - "claude-3-sonnet"
+          - "claude-3-haiku"
+          - "llama-3-70b-instruct"
+          - "llama-3-8b-instruct"
+          - "gemini-pro-1.5"
+          - "gemini-pro"
+          - "mistral-large"
+        fetch: false
+      titleConvo: true
+      titleModel: "current_model"
+      dropParams: ["stream"]
+
+    # cohere
+    - name: "cohere"
+      apiKey: "${COHERE_API_KEY}"
+      baseURL: "https://api.cohere.ai/v1"
+      models:
+        default: ["command-r","command-r-plus","command-light"]
+        fetch: false
+      modelDisplayLabel: "cohere"
+      titleModel: "current_model"
+      dropParams: ["stop", "user", "frequency_penalty", "presence_penalty", "temperature", "top_p"]
+
+    # groq
+    - name: "groq"
+      apiKey: "${GROQ_API_KEY}"
+      baseURL: "https://api.groq.com/openai/v1/"
+      models:
+        default: ["llama3-70b-8192", "llama3-8b-8192", "mixtral-8x7b-32768"]
+        fetch: false
+      titleConvo: true
+      titleModel: "current_model"
+      modelDisplayLabel: "groq"
+
+    # OpenRouter.ai
+    - name: "OpenRouter"
+      apiKey: "${OPENROUTER_KEY}"
+      baseURL: "https://openrouter.ai/api/v1"
+      models:
+        default: ["openai/gpt-3.5-turbo"]
+        fetch: true
+      titleConvo: true
+      titleModel: "current_model"
+      modelDisplayLabel: "OpenRouter"
+
+    # Perplexity
+    - name: "Perplexity"
+      apiKey: "${PERPLEXITY_API_KEY}"
+      baseURL: "https://api.perplexity.ai/"
+      models:
+        default: ["sonar-small-chat", "sonar-medium-chat"]
+        fetch: false
+      titleConvo: true
+      titleModel: "current_model"
+      dropParams: ["stop", "frequency_penalty"]
+      modelDisplayLabel: "Perplexity"
