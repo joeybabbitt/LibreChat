@@ -26,8 +26,12 @@ interface:
     externalUrl: 'https://librechat.ai/tos'
     openNewTab: true
 
+# gemini edited
 registration:
-  socialLogins: ["discord", "facebook", "github", "google", "openid"]
+  registrationEnabled: false
+  socialLogins: ["discord", "github", "google"]
+  # This pulls the email from Railway instead of showing it on GitHub
+  allowedEmails: ["${ADMIN_EMAIL}"]
 
 endpoints:
   custom:
