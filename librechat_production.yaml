@@ -7,6 +7,17 @@ interface:
   prompts: true
   marketplace:
     use: true
+
+    fileConfig:
+  endpoints:
+    default:
+      # This explicitly tells the server to allow Word docs
+      supportedMimeTypes:
+        - "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        - "application/pdf"
+        - "text/.*"
+      # Increase this if your files are large (value is in bytes)
+      fileLimit: 25485760 # 25MB
   
   # --- UI FEATURES ---
   artifacts: true
