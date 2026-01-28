@@ -9,7 +9,12 @@
 # Specific patterns to ignore
 data-node
 meili_data*
+
+#gemini chg
 librechat*
+!librechat_production.yaml
+!librechat.yaml
+
 Dockerfile*
 docs
 
