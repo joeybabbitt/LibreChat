@@ -1,7 +1,6 @@
 version: 1.2.8
 cache: true
 
-# --- INTERFACE SETTINGS ---
 interface:
   agents: true
   prompts: true
@@ -21,8 +20,6 @@ interface:
     externalUrl: 'https://librechat.ai/tos'
     openNewTab: true
 
-# --- FILE & UPLOAD SETTINGS ---
-# This was indented too far in your version
 fileConfig:
   endpoints:
     default:
@@ -32,13 +29,11 @@ fileConfig:
         - "text/.*"
       fileLimit: 25485760 # 25MB
 
-# --- USER ACCESS ---
 registration:
   registrationEnabled: false
   socialLogins: ["discord", "github", "google"]
   allowedEmails: ["${ADMIN_EMAIL}"]
 
-# --- AI ENDPOINTS ---
 endpoints:
   custom:
     - name: "Anyscale"
@@ -54,6 +49,8 @@ endpoints:
       apiKey: "${APIPIE_API_KEY}"
       baseURL: "https://apipie.ai/v1/"
       models:
+        # This was missing and caused the 'ZodError'
+        default: ["gpt-3.5-turbo"] 
         fetch: true
       titleConvo: true
       titleModel: "current_model"
@@ -62,6 +59,8 @@ endpoints:
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
       models:
+        # This was missing and caused the 'ZodError'
+        default: ["openai/gpt-3.5-turbo"]
         fetch: true
       titleConvo: true
       titleModel: "current_model"
