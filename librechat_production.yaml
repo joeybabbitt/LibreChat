@@ -41,7 +41,7 @@ endpoints:
       baseURL: "https://openrouter.ai/api/v1"
       models:
         default: ["openai/gpt-3.5-turbo", "google/gemini-pro-1.5", "anthropic/claude-3.5-sonnet"]
-        fetch: false
+        fetch: true
       titleConvo: true
       titleModel: "current_model"
 
@@ -54,7 +54,7 @@ endpoints:
           - "qwen/qwen2.5-72b-instruct-abliterated"
           - "deepseek/deepseek-v3-abliterated"
           - "meta-llama/Meta-Llama-3.1-70B-Instruct"
-        fetch: false
+        fetch: true
       titleConvo: false
       titleModel: "current_model"
       summarize: false
