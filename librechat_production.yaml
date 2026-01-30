@@ -60,4 +60,4 @@ endpoints:
       summarize: false
       headers:
         HTTP-Referer: "https://librechat.ai"
-        X-Title: "LibreChat"
+        X-Title: "LibreChat-User-JH"
