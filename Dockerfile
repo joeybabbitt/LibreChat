@@ -1,7 +1,7 @@
 # Base image with latest LibreChat features
 FROM ghcr.io/danny-avila/librechat-dev:latest
 
-# 1. Performance & MCP Tools (From your original)
+# 1. Performance & MCP Tools
 USER root
 RUN apk add --no-cache jemalloc python3 py3-pip
 ENV LD_PRELOAD=/usr/lib/libjemalloc.so.2
@@ -22,10 +22,15 @@ RUN mkdir -p /app/data/images \
 RUN ln -s /app/data/images /app/client/public/images && \
     ln -s /app/data/uploads /app/uploads
 
-# 5. Set Permissions & Memory Stability
-# chown ensures the 'node' user can write to your 3GB volume
-RUN chown -R node:node /app/data /app/client/public/images /app/uploads
+# 5. Set Permissions & Fix violations.json Crash
+# We create the file as root and give it full permissions before switching users
+RUN touch /app/data/violations.json && \
+    chmod 777 /app/data/violations.json && \
+    chown -R node:node /app/data /app/client/public/images /app/uploads
+
 ENV NODE_OPTIONS="--max-old-space-size=2048"
+
+# Switch to non-root user for security
 USER node
 
 # 6. Apply your specific config file
