@@ -40,28 +40,7 @@ endpoints:
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
       models:
-        default: ["openai/gpt-3.5-turbo", "google/gemini-pro-1.5", "anthropic/claude-3.5-sonnet"]
+        default: ["openai/gpt-4o", "google/gemini-pro-1.5", "anthropic/claude-3.5-sonnet"]
         fetch: true
       titleConvo: true
       titleModel: "current_model"
-
-    - name: "Featherless"
-      apiKey: "${FEATHERLESS_API_KEY}"
-      baseURL: "https://api.featherless.ai/v1"
-      iconURL: "https://featherless.ai/favicon.ico"
-      models:
-        default: 
-          - "qwen/qwen2.5-72b-instruct-abliterated"
-          - "deepseek/deepseek-v3-abliterated"
-          - "meta-llama/Meta-Llama-3.1-70B-Instruct"
-        fetch: true
-        # Explicitly wrapping in 'include' ensures the regex is applied to the fetched list
-        filters: 
-          include: 
-            - "(?i)(qwen|deepseek|llama-3.1|failspy|huihui|dolphin|hermes|uncensored|maziyarpanahi|mradermacher)"
-      titleConvo: false
-      titleModel: "current_model"
-      summarize: false
-      headers:
-        HTTP-Referer: "https://librechat.ai"
-        X-Title: "LibreChat-User-JH"
