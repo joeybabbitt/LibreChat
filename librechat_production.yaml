@@ -55,8 +55,10 @@ endpoints:
           - "deepseek/deepseek-v3-abliterated"
           - "meta-llama/Meta-Llama-3.1-70B-Instruct"
         fetch: true
-        # This regex acts as a 'bouncer' at the door, only letting in the good stuff
-        filters: ["(?i)(qwen|deepseek|llama-3.1|failspy|huihui|dolphin|hermes|uncensored|maziyarpanahi|mradermacher)"]
+        # Explicitly wrapping in 'include' ensures the regex is applied to the fetched list
+        filters: 
+          include: 
+            - "(?i)(qwen|deepseek|llama-3.1|failspy|huihui|dolphin|hermes|uncensored|maziyarpanahi|mradermacher)"
       titleConvo: false
       titleModel: "current_model"
       summarize: false
