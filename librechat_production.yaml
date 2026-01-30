@@ -49,7 +49,6 @@ endpoints:
       apiKey: "${APIPIE_API_KEY}"
       baseURL: "https://apipie.ai/v1/"
       models:
-        # This was missing and caused the 'ZodError'
         default: ["gpt-3.5-turbo"] 
         fetch: true
       titleConvo: true
@@ -59,8 +58,21 @@ endpoints:
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
       models:
-        # This was missing and caused the 'ZodError'
         default: ["openai/gpt-3.5-turbo"]
         fetch: true
       titleConvo: true
       titleModel: "current_model"
+
+    - name: "Featherless"
+      apiKey: "${FEATHERLESS_API_KEY}"
+      baseURL: "https://api.featherless.ai/v1"
+      iconURL: "https://featherless.ai/favicon.ico"
+      models:
+        default: ["meta-llama/Meta-Llama-3.1-70B-Instruct"]
+        fetch: true
+      titleConvo: true
+      titleModel: "current_model"
+      summarize: false
+      headers:
+        HTTP-Referer: "https://librechat.ai"
+        X-Title: "LibreChat"
