@@ -38,4 +38,4 @@ COPY --chown=node:node librechat_production.yaml ./librechat.yaml
 
 # 7. Run Migrations & Start Backend
 # This finally unlocks your Marketplace, Agents, and Prompts
-CMD ["sh", "-c", "npm run migrate:agent-permissions && npm run migrate:prompt-permissions && npm run backend"]
+CMD ["sh", "-c", "USER=root chown -R node:node /app/data && npm run migrate:agent-permissions && npm run migrate:prompt-permissions && npm run backend"]
