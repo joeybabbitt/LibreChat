@@ -5,25 +5,25 @@ cache: true
 interface:
   agents: true
   prompts: true
-  tools: true
+  tools: true # Enables the Wrench icon in the chat bar
   artifacts: true
   modelSelect: true 
   sidePanel: true
   bookmarks: true
 
-# --- MODEL SPECS (This cleans up your model picker) ---
+# --- MODEL SPECS (Cleans up picker & pre-primes search) ---
 modelSpecs:
-  enforce: true # This hides any endpoint NOT listed below (like Tavily)
+  enforce: true
   list:
     - name: "kimi-k2p5-fast"
       label: "Kimi K2.5 (High-Speed)"
       endpoint: "custom"
       model: "accounts/fireworks/models/kimi-k2p5"
-      iconURL: "https://www.librechat.ai/favicon.ico" # Native Fireworks icon placeholder
+      iconURL: "https://www.librechat.ai/favicon.ico"
       preset:
         endpoint: "custom"
         model: "accounts/fireworks/models/kimi-k2p5"
-        tools: ["tavily_search"] # Pre-primes search for you
+        tools: ["tavily_search"]
 
     - name: "openrouter-gpt4"
       label: "OpenRouter (GPT/Claude)"
@@ -59,7 +59,7 @@ registration:
   socialLogins: ["discord", "github", "google"]
   allowedEmails: ["${ADMIN_EMAIL}"]
 
-# --- ENDPOINTS (The Engines) ---
+# --- ENDPOINTS (Engines & Tool Fixes) ---
 endpoints:
   custom:
     - name: "Fireworks"
@@ -69,6 +69,9 @@ endpoints:
         default: ["accounts/fireworks/models/kimi-k2p5"]
         fetch: true
       actions: ["tavily_search"]
+      # This forces the Tool menu to appear in regular chat
+      customParams:
+        defaultParamsEndpoint: "openAI"
       titleConvo: true
 
     - name: "OpenRouter"
@@ -78,6 +81,8 @@ endpoints:
         default: ["openai/gpt-4o", "google/gemini-pro-1.5"]
         fetch: true
       actions: ["tavily_search"]
+      customParams:
+        defaultParamsEndpoint: "openAI"
       titleConvo: true
 
     - name: "Featherless"
@@ -87,6 +92,8 @@ endpoints:
         default: ["meta-llama/Llama-3.3-70B-Instruct-Abliterated"]
         fetch: true
       actions: ["tavily_search"]
+      customParams:
+        defaultParamsEndpoint: "openAI"
       titleConvo: true
 
     - name: "Tavily"
@@ -94,4 +101,5 @@ endpoints:
       baseURL: "https://api.tavily.com"
       models:
         default: ["tavily_search"]
-      isCompanion: true # Ensures it acts as a tool, not a standalone chat model
+      isCompanion: true 
+      titleConvo: false
