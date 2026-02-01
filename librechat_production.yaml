@@ -5,7 +5,7 @@ cache: true
 interface:
   agents: true
   prompts: true
-  tools: true # This enables the "Tools" dropdown for Agents
+  tools: true # Enables the Tools/Search dropdown
   marketplace:
     use: true
   artifacts: true
@@ -23,7 +23,6 @@ interface:
     openNewTab: true
 
 # --- NATIVE WEB SEARCH ---
-# This powers the search icon directly in the chat bar
 webSearch:
   searchProvider: "tavily"
   tavilyApiKey: "${TAVILY_API_KEY}"
@@ -47,31 +46,46 @@ registration:
 # --- ENDPOINTS ---
 endpoints:
   custom:
-    # 1. OPENROUTER (Daily Driver / Logic)
+    # 1. FIREWORKS AI (Speed & Native Kimi K2.5)
+    - name: "Fireworks"
+      apiKey: "${FIREWORKS_API_KEY}"
+      baseURL: "https://api.fireworks.ai/inference/v1"
+      models:
+        default: [
+          "accounts/fireworks/models/kimi-k2p5", 
+          "accounts/fireworks/models/llama-v3p3-70b-instruct",
+          "accounts/fireworks/models/qwen2p5-72b-instruct"
+        ]
+        fetch: true
+      titleConvo: true
+      titleModel: "current_model"
+      # Fireworks can be strict; use dropParams if titles fail
+      dropParams: ["user"]
+
+    # 2. OPENROUTER (Logic / Backup)
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
       models:
-        default: ["openai/gpt-4o", "google/gemini-pro-1.5", "anthropic/claude-3.5-sonnet", "moonshotai/kimi-k2.5"]
+        default: ["openai/gpt-4o", "google/gemini-pro-1.5", "anthropic/claude-3.5-sonnet"]
         fetch: true
       titleConvo: true
       titleModel: "current_model"
 
-    # 2. FEATHERLESS (Abliterated / High Volume)
+    # 3. FEATHERLESS (Abliterated / Unlimited)
     - name: "Featherless"
       apiKey: "${FEATHERLESS_API_KEY}"
       baseURL: "https://api.featherless.ai/v1"
       models:
-        default: ["meta-llama/Llama-3.3-70B-Instruct-Abliterated", "moonshotai/Kimi-K2.5"]
+        default: ["meta-llama/Llama-3.3-70B-Instruct-Abliterated"]
         fetch: true
       titleConvo: true
       titleModel: "current_model"
 
-    # 3. TAVILY (Standalone Tool for Agents)
+    # 4. TAVILY (Standalone Tool for Agents)
     - name: "Tavily"
       apiKey: "${TAVILY_API_KEY}"
       baseURL: "https://api.tavily.com"
       models:
         default: ["tavily_search"]
         fetch: false
-      titleConvo: false
