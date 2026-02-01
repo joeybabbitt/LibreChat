@@ -1,49 +1,47 @@
 version: "1.3.3"
 cache: true
 
-# --- INTERFACE SETTINGS ---
 interface:
   agents: true
   prompts: true
-  tools: true # Enables the Wrench icon in the chat bar
+  tools: true
   artifacts: true
   modelSelect: true 
   sidePanel: true
   bookmarks: true
 
-# --- MODEL SPECS (Cleans up picker & pre-primes search) ---
+# --- MODEL SPECS (Clean UI + Search Pre-loaded) ---
 modelSpecs:
-  enforce: true
+  enforce: false
+  prioritize: true
   list:
     - name: "kimi-k2p5-fast"
       label: "Kimi K2.5 (High-Speed)"
       endpoint: "custom"
       model: "accounts/fireworks/models/kimi-k2p5"
-      iconURL: "https://www.librechat.ai/favicon.ico"
       preset:
         endpoint: "custom"
         model: "accounts/fireworks/models/kimi-k2p5"
         tools: ["tavily_search"]
 
-    - name: "openrouter-gpt4"
-      label: "OpenRouter (GPT/Claude)"
+    - name: "deepseek-r1-logic"
+      label: "DeepSeek R1 (Deep Logic)"
       endpoint: "custom"
-      model: "openai/gpt-4o"
+      model: "deepseek-ai/DeepSeek-R1"
       preset:
         endpoint: "custom"
-        model: "openai/gpt-4o"
+        model: "deepseek-ai/DeepSeek-R1"
         tools: ["tavily_search"]
 
-    - name: "llama-3.3-unfiltered"
+    - name: "llama-3.3-abliterated"
       label: "Llama 3.3 (Unfiltered)"
       endpoint: "custom"
-      model: "meta-llama/Llama-3.3-70B-Instruct-Abliterated"
+      model: "huihui-ai/Llama-3.3-70B-Instruct-abliterated"
       preset:
         endpoint: "custom"
-        model: "meta-llama/Llama-3.3-70B-Instruct-Abliterated"
+        model: "huihui-ai/Llama-3.3-70B-Instruct-abliterated"
         tools: ["tavily_search"]
 
-# --- FILE CONFIGURATION ---
 fileConfig:
   endpoints:
     default:
@@ -51,29 +49,28 @@ fileConfig:
         - "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         - "application/pdf"
         - "text/.*"
-      fileLimit: 25485760 # 25MB
+      fileLimit: 25485760
 
-# --- REGISTRATION ---
 registration:
   registrationEnabled: false
   socialLogins: ["discord", "github", "google"]
   allowedEmails: ["${ADMIN_EMAIL}"]
 
-# --- ENDPOINTS (Engines & Tool Fixes) ---
 endpoints:
   custom:
+    # 1. FIREWORKS (Speed & Kimi)
     - name: "Fireworks"
       apiKey: "${FIREWORKS_API_KEY}"
       baseURL: "https://api.fireworks.ai/inference/v1"
       models:
-        default: ["accounts/fireworks/models/kimi-k2p5"]
+        default: ["accounts/fireworks/models/kimi-k2p5", "accounts/fireworks/models/llama-v3p3-70b-instruct"]
         fetch: true
       actions: ["tavily_search"]
-      # This forces the Tool menu to appear in regular chat
       customParams:
         defaultParamsEndpoint: "openAI"
       titleConvo: true
 
+    # 2. OPENROUTER (Backups)
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
@@ -85,21 +82,44 @@ endpoints:
         defaultParamsEndpoint: "openAI"
       titleConvo: true
 
+    # 3. FEATHERLESS (The "Bangkok Elite" List)
     - name: "Featherless"
       apiKey: "${FEATHERLESS_API_KEY}"
       baseURL: "https://api.featherless.ai/v1"
       models:
-        default: ["meta-llama/Llama-3.3-70B-Instruct-Abliterated"]
-        fetch: true
+        # We TURNED OFF fetch to fix the hanging
+        fetch: false 
+        default: 
+          # --- REASONING & LOGIC (Visa, Taxes, Budgets) ---
+          - "deepseek-ai/DeepSeek-R1" # Best open source reasoning
+          - "Qwen/Qwen2.5-72B-Instruct" # Best for Thai Language & Multilingual Logic
+          - "moonshotai/Kimi-K2.5" # The Agentic King (If available)
+          
+          # --- UNCENSORED / "REAL TALK" (Nightlife, Safety, Reviews) ---
+          - "huihui-ai/Llama-3.3-70B-Instruct-abliterated" # Your main "no lecture" model
+          - "cognitivecomputations/dolphin-2.9.2-qwen2-72b" # Uncensored Logic (Smart + Raw)
+          
+          # --- CREATIVE WRITING & ROLEPLAY (Vibe drafting) ---
+          - "Sao10K/L3.3-70B-Euryale-v2.3" # The absolute best for story/roleplay
+          - "NousResearch/Hermes-3-Llama-3.1-70B" # Great personality, less robotic
+          
+          # --- WRITING & STYLE (Landlord Emails) ---
+          - "mistralai/Mistral-Large-Instruct-2407" # Professional, European tone
+          - "nvidia/Llama-3.1-Nemotron-70B-Instruct" # Highly structured output
+          
+          # --- UTILITY ---
+          - "microsoft/Phi-4" # Fast checks
+          - "Qwen/Qwen2.5-Coder-32B-Instruct" # Coding scripts
+      
       actions: ["tavily_search"]
       customParams:
         defaultParamsEndpoint: "openAI"
       titleConvo: true
 
+    # 4. TAVILY TOOL (Hidden)
     - name: "Tavily"
       apiKey: "${TAVILY_API_KEY}"
       baseURL: "https://api.tavily.com"
       models:
         default: ["tavily_search"]
-      isCompanion: true 
-      titleConvo: false
+      isCompanion: true
