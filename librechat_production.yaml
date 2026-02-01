@@ -5,14 +5,45 @@ cache: true
 interface:
   agents: true
   prompts: true
-  tools: true # This makes the Tool/Plugin menu appear in the UI
+  tools: true
   artifacts: true
-  modelSelect: true
+  modelSelect: true 
   sidePanel: true
   bookmarks: true
 
-# --- WE REMOVED THE WEBSEARCH BLOCK TO PREVENT THE ZOD ERROR ---
+# --- MODEL SPECS (This cleans up your model picker) ---
+modelSpecs:
+  enforce: true # This hides any endpoint NOT listed below (like Tavily)
+  list:
+    - name: "kimi-k2p5-fast"
+      label: "Kimi K2.5 (High-Speed)"
+      endpoint: "custom"
+      model: "accounts/fireworks/models/kimi-k2p5"
+      iconURL: "https://www.librechat.ai/favicon.ico" # Native Fireworks icon placeholder
+      preset:
+        endpoint: "custom"
+        model: "accounts/fireworks/models/kimi-k2p5"
+        tools: ["tavily_search"] # Pre-primes search for you
 
+    - name: "openrouter-gpt4"
+      label: "OpenRouter (GPT/Claude)"
+      endpoint: "custom"
+      model: "openai/gpt-4o"
+      preset:
+        endpoint: "custom"
+        model: "openai/gpt-4o"
+        tools: ["tavily_search"]
+
+    - name: "llama-3.3-unfiltered"
+      label: "Llama 3.3 (Unfiltered)"
+      endpoint: "custom"
+      model: "meta-llama/Llama-3.3-70B-Instruct-Abliterated"
+      preset:
+        endpoint: "custom"
+        model: "meta-llama/Llama-3.3-70B-Instruct-Abliterated"
+        tools: ["tavily_search"]
+
+# --- FILE CONFIGURATION ---
 fileConfig:
   endpoints:
     default:
@@ -20,50 +51,47 @@ fileConfig:
         - "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         - "application/pdf"
         - "text/.*"
-      fileLimit: 25485760
+      fileLimit: 25485760 # 25MB
 
+# --- REGISTRATION ---
 registration:
   registrationEnabled: false
   socialLogins: ["discord", "github", "google"]
   allowedEmails: ["${ADMIN_EMAIL}"]
 
+# --- ENDPOINTS (The Engines) ---
 endpoints:
   custom:
-    # 1. FIREWORKS AI
     - name: "Fireworks"
       apiKey: "${FIREWORKS_API_KEY}"
       baseURL: "https://api.fireworks.ai/inference/v1"
       models:
-        default: 
-          - "accounts/fireworks/models/kimi-k2p5"
-          - "accounts/fireworks/models/llama-v3p3-70b-instruct"
+        default: ["accounts/fireworks/models/kimi-k2p5"]
         fetch: true
+      actions: ["tavily_search"]
       titleConvo: true
-      titleModel: "current_model"
 
-    # 2. OPENROUTER
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
       models:
-        default: ["openai/gpt-4o", "google/gemini-pro-1.5", "anthropic/claude-3.5-sonnet"]
+        default: ["openai/gpt-4o", "google/gemini-pro-1.5"]
         fetch: true
+      actions: ["tavily_search"]
       titleConvo: true
 
-    # 3. FEATHERLESS
     - name: "Featherless"
       apiKey: "${FEATHERLESS_API_KEY}"
       baseURL: "https://api.featherless.ai/v1"
       models:
         default: ["meta-llama/Llama-3.3-70B-Instruct-Abliterated"]
         fetch: true
+      actions: ["tavily_search"]
       titleConvo: true
 
-    # 4. TAVILY (The Search Fix)
     - name: "Tavily"
       apiKey: "${TAVILY_API_KEY}"
       baseURL: "https://api.tavily.com"
       models:
         default: ["tavily_search"]
-      isCompanion: true # This allows it to be used as a tool/plugin
-      titleConvo: false
+      isCompanion: true # Ensures it acts as a tool, not a standalone chat model
