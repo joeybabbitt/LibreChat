@@ -5,7 +5,7 @@ cache: true
 interface:
   agents: true
   prompts: true
-  tools: true # Enables the Tools/Search dropdown in the UI
+  tools: true # This enables the "Tools" dropdown for Agents
   marketplace:
     use: true
   artifacts: true
@@ -22,8 +22,8 @@ interface:
     externalUrl: 'https://librechat.ai/tos'
     openNewTab: true
 
-# --- WEB SEARCH & SCRAPING ---
-# This block connects the UI to the Tavily service
+# --- NATIVE WEB SEARCH ---
+# This powers the search icon directly in the chat bar
 webSearch:
   searchProvider: "tavily"
   tavilyApiKey: "${TAVILY_API_KEY}"
@@ -47,7 +47,7 @@ registration:
 # --- ENDPOINTS ---
 endpoints:
   custom:
-    # Existing OpenRouter Configuration
+    # 1. OPENROUTER (Daily Driver / Logic)
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
@@ -57,7 +57,17 @@ endpoints:
       titleConvo: true
       titleModel: "current_model"
 
-    # New Tavily Endpoint for Research Tools
+    # 2. FEATHERLESS (Abliterated / High Volume)
+    - name: "Featherless"
+      apiKey: "${FEATHERLESS_API_KEY}"
+      baseURL: "https://api.featherless.ai/v1"
+      models:
+        default: ["meta-llama/Llama-3.3-70B-Instruct-Abliterated", "moonshotai/Kimi-K2.5"]
+        fetch: true
+      titleConvo: true
+      titleModel: "current_model"
+
+    # 3. TAVILY (Standalone Tool for Agents)
     - name: "Tavily"
       apiKey: "${TAVILY_API_KEY}"
       baseURL: "https://api.tavily.com"
