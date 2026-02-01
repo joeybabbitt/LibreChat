@@ -5,7 +5,7 @@ cache: true
 interface:
   agents: true
   prompts: true
-  tools: true # Enables the Tools/Search dropdown
+  tools: true
   marketplace:
     use: true
   artifacts: true
@@ -35,7 +35,7 @@ fileConfig:
         - "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         - "application/pdf"
         - "text/.*"
-      fileLimit: 25485760 # 25MB
+      fileLimit: 25485760
 
 # --- REGISTRATION ---
 registration:
@@ -51,15 +51,13 @@ endpoints:
       apiKey: "${FIREWORKS_API_KEY}"
       baseURL: "https://api.fireworks.ai/inference/v1"
       models:
-        default: [
-          "accounts/fireworks/models/kimi-k2p5", 
-          "accounts/fireworks/models/llama-v3p3-70b-instruct",
-          "accounts/fireworks/models/qwen2p5-72b-instruct"
-        ]
+        default: 
+          - "accounts/fireworks/models/kimi-k2p5"
+          - "accounts/fireworks/models/llama-v3p3-70b-instruct"
+          - "accounts/fireworks/models/qwen2p5-72b-instruct"
         fetch: true
       titleConvo: true
       titleModel: "current_model"
-      # Fireworks can be strict; use dropParams if titles fail
       dropParams: ["user"]
 
     # 2. OPENROUTER (Logic / Backup)
