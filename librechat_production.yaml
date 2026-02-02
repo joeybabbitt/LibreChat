@@ -10,14 +10,14 @@ interface:
   sidePanel: true
   bookmarks: true
 
-# --- MODEL SPECS (Fixed Naming for v0.8.2) ---
+# --- MODEL SPECS (Clean UI & Fixed Endpoint Mapping) ---
 modelSpecs:
-  enforce: false # Keeps Pinning working
+  enforce: false # Keeps UI flexible and pinning active
   prioritize: true
   list:
     - name: "kimi-k2p5-fast"
       label: "Kimi K2.5 (High-Speed)"
-      endpoint: "Fireworks" # Fixed: Must match the endpoint name in custom
+      endpoint: "Fireworks" 
       model: "accounts/fireworks/models/kimi-k2p5"
       preset:
         endpoint: "Fireworks"
@@ -25,17 +25,17 @@ modelSpecs:
         tools: ["tavily_search"]
 
     - name: "deepseek-r1-logic"
-      label: "DeepSeek R1 (Visa Math)"
-      endpoint: "Featherless" # Fixed: Must match the endpoint name in custom
+      label: "DeepSeek R1 (Visa/Logic)"
+      endpoint: "Featherless" 
       model: "deepseek-ai/DeepSeek-R1"
       preset:
         endpoint: "Featherless"
         model: "deepseek-ai/DeepSeek-R1"
         tools: ["tavily_search"]
 
-    - name: "llama-3.3-abliterated"
+    - name: "llama-3.3-unfiltered"
       label: "Llama 3.3 (Unfiltered)"
-      endpoint: "Featherless" # Fixed: Must match the endpoint name in custom
+      endpoint: "Featherless" 
       model: "huihui-ai/Llama-3.3-70B-Instruct-abliterated"
       preset:
         endpoint: "Featherless"
@@ -57,66 +57,76 @@ registration:
   allowedEmails: ["${ADMIN_EMAIL}"]
 
 endpoints:
-  # --- PLUGIN SYSTEM (Required to unlock Tool menu) ---
+  # --- PLUGIN SYSTEM (Required to unlock the tool wrench) ---
   plugins:
     titleConvo: true
     titleModel: "current_model"
 
   custom:
-    # 1. FIREWORKS
+    # 1. FIREWORKS (Performance & Speed)
     - name: "Fireworks"
       apiKey: "${FIREWORKS_API_KEY}"
       baseURL: "https://api.fireworks.ai/inference/v1"
       models:
-        default: ["accounts/fireworks/models/kimi-k2p5", "accounts/fireworks/models/llama-v3p3-70b-instruct"]
-        fetch: false
+        fetch: false # Fixed: Prevents hanging
+        default: 
+          - "accounts/fireworks/models/kimi-k2p5"
+          - "accounts/fireworks/models/llama-v3p3-70b-instruct"
+          - "accounts/fireworks/models/qwen2p5-72b-instruct"
+          - "accounts/fireworks/models/deepseek-v3"
       actions: ["tavily_search"]
       customParams:
         defaultParamsEndpoint: "openAI"
-      dropParams: ["stop", "user"]
+      dropParams: ["stop", "user"] # Unlocks customization sliders
       titleConvo: true
 
-    # 2. OPENROUTER
+    # 2. OPENROUTER (The "Best of" Backup)
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
       models:
-        default: ["openai/gpt-4o", "google/gemini-pro-1.5"]
-        fetch: false
+        fetch: false # Fixed: Prevents hanging
+        default: 
+          - "openai/gpt-4o"
+          - "openai/o1"
+          - "google/gemini-2.0-flash-001"
+          - "anthropic/claude-3.5-sonnet"
+          - "x-ai/grok-2-1212"
       actions: ["tavily_search"]
       customParams:
         defaultParamsEndpoint: "openAI"
       dropParams: ["stop", "user"]
       titleConvo: true
 
-    # 3. FEATHERLESS (Curated Performance List)
+    # 3. FEATHERLESS (Expert Unfiltered Selection)
     - name: "Featherless"
       apiKey: "${FEATHERLESS_API_KEY}"
       baseURL: "https://api.featherless.ai/v1"
       models:
-        fetch: false 
+        fetch: false # Critical fix for Featherless
         default: 
-          - "deepseek-ai/DeepSeek-R1" # Pure Reasoning
-          - "Qwen/Qwen2.5-72B-Instruct" # Performance/Thai Language
-          - "moonshotai/Kimi-K2.5" # Elite Performance
-          - "huihui-ai/Llama-3.3-70B-Instruct-abliterated" # Unfiltered Writing
-          - "cognitivecomputations/dolphin-2.9.2-qwen2-72b" # Uncensored Logic
-          - "Sao10K/L3.3-70B-Euryale-v2.3" # Roleplay/Creative Writing
+          - "deepseek-ai/DeepSeek-R1" # Reasoning
+          - "huihui-ai/Llama-3.3-70B-Instruct-abliterated" # Uncensored
+          - "moonshotai/Kimi-K2.5" # Multi-agent performance
+          - "Qwen/Qwen2.5-72B-Instruct" # Multilingual Thai support
+          - "Sao10K/L3.3-70B-Euryale-v2.3" # Best Roleplay/Fiction
+          - "cognitivecomputations/dolphin-2.9.2-qwen2-72b" # Uncensored logic
           - "NousResearch/Hermes-3-Llama-3.1-70B" # Personal/Creative
-          - "mistralai/Mistral-Large-Instruct-2407" # Non-fiction Professional
-          - "nvidia/Llama-3.1-Nemotron-70B-Instruct" # Structured Non-fiction
-          - "microsoft/Phi-4" # Fast Speed
-          - "Qwen/Qwen2.5-Coder-32B-Instruct" # Technical/Coding
+          - "mistralai/Mistral-Large-Instruct-2407" # Professional Non-fiction
+          - "nvidia/Llama-3.1-Nemotron-70B-Instruct" # Structured output
+          - "microsoft/Phi-4" # Fast reasoning
+          - "Qwen/Qwen2.5-Coder-32B-Instruct" # Coding scripts
       actions: ["tavily_search"]
       customParams:
         defaultParamsEndpoint: "openAI"
       dropParams: ["stop", "user"]
       titleConvo: true
 
-    # 4. TAVILY (Tool Registration)
+    # 4. TAVILY (Tool Source)
     - name: "Tavily"
       apiKey: "${TAVILY_API_KEY}"
       baseURL: "https://api.tavily.com"
       models:
         default: ["tavily_search"]
-      isCompanion: true
+      isCompanion: true 
+      titleConvo: false
