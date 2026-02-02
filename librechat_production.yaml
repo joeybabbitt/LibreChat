@@ -10,35 +10,35 @@ interface:
   sidePanel: true
   bookmarks: true
 
-# --- MODEL SPECS (Clean UI + Search Pre-loaded) ---
+# --- MODEL SPECS (Fixed Naming for v0.8.2) ---
 modelSpecs:
   enforce: false # Keeps Pinning working
   prioritize: true
   list:
     - name: "kimi-k2p5-fast"
       label: "Kimi K2.5 (High-Speed)"
-      endpoint: "custom"
+      endpoint: "Fireworks" # Fixed: Must match the endpoint name in custom
       model: "accounts/fireworks/models/kimi-k2p5"
       preset:
-        endpoint: "custom"
+        endpoint: "Fireworks"
         model: "accounts/fireworks/models/kimi-k2p5"
         tools: ["tavily_search"]
 
     - name: "deepseek-r1-logic"
-      label: "DeepSeek R1 (Deep Logic)"
-      endpoint: "custom"
+      label: "DeepSeek R1 (Visa Math)"
+      endpoint: "Featherless" # Fixed: Must match the endpoint name in custom
       model: "deepseek-ai/DeepSeek-R1"
       preset:
-        endpoint: "custom"
+        endpoint: "Featherless"
         model: "deepseek-ai/DeepSeek-R1"
         tools: ["tavily_search"]
 
     - name: "llama-3.3-abliterated"
       label: "Llama 3.3 (Unfiltered)"
-      endpoint: "custom"
+      endpoint: "Featherless" # Fixed: Must match the endpoint name in custom
       model: "huihui-ai/Llama-3.3-70B-Instruct-abliterated"
       preset:
-        endpoint: "custom"
+        endpoint: "Featherless"
         model: "huihui-ai/Llama-3.3-70B-Instruct-abliterated"
         tools: ["tavily_search"]
 
@@ -57,77 +57,66 @@ registration:
   allowedEmails: ["${ADMIN_EMAIL}"]
 
 endpoints:
-  # --- CRITICAL FIX: Wakes up the Tool System ---
+  # --- PLUGIN SYSTEM (Required to unlock Tool menu) ---
   plugins:
     titleConvo: true
     titleModel: "current_model"
 
   custom:
-    # 1. FIREWORKS (Speed & Kimi)
+    # 1. FIREWORKS
     - name: "Fireworks"
       apiKey: "${FIREWORKS_API_KEY}"
       baseURL: "https://api.fireworks.ai/inference/v1"
       models:
         default: ["accounts/fireworks/models/kimi-k2p5", "accounts/fireworks/models/llama-v3p3-70b-instruct"]
-        fetch: true
+        fetch: false
       actions: ["tavily_search"]
       customParams:
         defaultParamsEndpoint: "openAI"
-      dropParams: ["stop", "user"] # Unlocks sliders
+      dropParams: ["stop", "user"]
       titleConvo: true
 
-    # 2. OPENROUTER (Backups)
+    # 2. OPENROUTER
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
       models:
         default: ["openai/gpt-4o", "google/gemini-pro-1.5"]
-        fetch: true
+        fetch: false
       actions: ["tavily_search"]
       customParams:
         defaultParamsEndpoint: "openAI"
-      dropParams: ["stop", "user"] # Unlocks sliders
+      dropParams: ["stop", "user"]
       titleConvo: true
 
-    # 3. FEATHERLESS (The "Bangkok Elite" List)
+    # 3. FEATHERLESS (Curated Performance List)
     - name: "Featherless"
       apiKey: "${FEATHERLESS_API_KEY}"
       baseURL: "https://api.featherless.ai/v1"
       models:
         fetch: false 
         default: 
-          # --- REASONING & LOGIC ---
-          - "deepseek-ai/DeepSeek-R1"
-          - "Qwen/Qwen2.5-72B-Instruct"
-          - "moonshotai/Kimi-K2.5"
-          
-          # --- UNCENSORED / REAL TALK ---
-          - "huihui-ai/Llama-3.3-70B-Instruct-abliterated"
-          - "cognitivecomputations/dolphin-2.9.2-qwen2-72b"
-          
-          # --- CREATIVE WRITING ---
-          - "Sao10K/L3.3-70B-Euryale-v2.3"
-          - "NousResearch/Hermes-3-Llama-3.1-70B"
-          
-          # --- STYLE ---
-          - "mistralai/Mistral-Large-Instruct-2407"
-          - "nvidia/Llama-3.1-Nemotron-70B-Instruct"
-          
-          # --- UTILITY ---
-          - "microsoft/Phi-4"
-          - "Qwen/Qwen2.5-Coder-32B-Instruct"
-      
+          - "deepseek-ai/DeepSeek-R1" # Pure Reasoning
+          - "Qwen/Qwen2.5-72B-Instruct" # Performance/Thai Language
+          - "moonshotai/Kimi-K2.5" # Elite Performance
+          - "huihui-ai/Llama-3.3-70B-Instruct-abliterated" # Unfiltered Writing
+          - "cognitivecomputations/dolphin-2.9.2-qwen2-72b" # Uncensored Logic
+          - "Sao10K/L3.3-70B-Euryale-v2.3" # Roleplay/Creative Writing
+          - "NousResearch/Hermes-3-Llama-3.1-70B" # Personal/Creative
+          - "mistralai/Mistral-Large-Instruct-2407" # Non-fiction Professional
+          - "nvidia/Llama-3.1-Nemotron-70B-Instruct" # Structured Non-fiction
+          - "microsoft/Phi-4" # Fast Speed
+          - "Qwen/Qwen2.5-Coder-32B-Instruct" # Technical/Coding
       actions: ["tavily_search"]
       customParams:
         defaultParamsEndpoint: "openAI"
-      dropParams: ["stop", "user"] # Unlocks sliders
+      dropParams: ["stop", "user"]
       titleConvo: true
 
-    # 4. TAVILY (Tool Source)
+    # 4. TAVILY (Tool Registration)
     - name: "Tavily"
       apiKey: "${TAVILY_API_KEY}"
       baseURL: "https://api.tavily.com"
       models:
         default: ["tavily_search"]
-      isCompanion: true 
-      titleConvo: false
+      isCompanion: true
