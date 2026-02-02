@@ -25,9 +25,7 @@ registration:
   allowedEmails: ["${ADMIN_EMAIL}"]
 
 endpoints:
-  # 🔥 CUSTOM ENDPOINTS FIRST (critical ordering)
   custom:
-    # 1. FIREWORKS
     - name: "Fireworks"
       apiKey: "${FIREWORKS_API_KEY}"
       baseURL: "https://api.fireworks.ai/inference/v1"
@@ -42,7 +40,6 @@ endpoints:
       titleModel: "current_model"
       dropParams: ["stop", "user"]
 
-    # 2. OPENROUTER
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
@@ -58,7 +55,6 @@ endpoints:
       titleModel: "current_model"
       dropParams: ["stop", "user"]
 
-    # 3. FEATHERLESS
     - name: "Featherless"
       apiKey: "${FEATHERLESS_API_KEY}"
       baseURL: "https://api.featherless.ai/v1"
@@ -79,8 +75,3 @@ endpoints:
       titleConvo: true
       titleModel: "current_model"
       dropParams: ["stop", "user"]
-
-  # 🔌 PLUGINS LAST (critical ordering)
-  plugins:
-    titleConvo: true
-    titleModel: "current_model"
