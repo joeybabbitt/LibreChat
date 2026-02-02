@@ -1,77 +1,54 @@
 version: "1.3.3"
-cache: true
-
-interface:
-  agents: true
-  prompts: true
-  tools: true
-  artifacts: true
-  modelSelect: true 
-  sidePanel: true
-  bookmarks: true
-
-fileConfig:
-  endpoints:
-    default:
-      supportedMimeTypes:
-        - "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        - "application/pdf"
-        - "text/.*"
-      fileLimit: 25485760
-
-registration:
-  registrationEnabled: false
-  socialLogins: ["discord", "github", "google"]
-  allowedEmails: ["${ADMIN_EMAIL}"]
 
 endpoints:
   custom:
+    # === FIREWORKS ===
     - name: "Fireworks"
       apiKey: "${FIREWORKS_API_KEY}"
       baseURL: "https://api.fireworks.ai/inference/v1"
       models:
-        default: 
-          - "accounts/fireworks/models/kimi-k2p5"
-          - "accounts/fireworks/models/llama-v3p3-70b-instruct"
-          - "accounts/fireworks/models/qwen2p5-72b-instruct"
-          - "accounts/fireworks/models/deepseek-v3"
+        default: ["accounts/fireworks/models/kimi-k2p5"]
         fetch: false
       titleConvo: true
-      titleModel: "current_model"
-      dropParams: ["stop", "user"]
+      titleModel: "accounts/fireworks/models/llama-v3p3-70b-instruct"
+      summarize: false
+      summaryModel: "accounts/fireworks/models/llama-v3p3-70b-instruct"
+      dropParams: ["stop", "user", "frequency_penalty", "presence_penalty"]
 
+    # === XAI GROK 4 ===
+    - name: "xAI Grok 4"
+      apiKey: "${XAI_API_KEY}"
+      baseURL: "https://api.x.ai/v1"
+      models:
+        default:
+          - name: "grok-4"
+            displayName: "Grok 4"
+            contextSize: 131072
+            maxOutputTokens: 8192
+          - name: "grok-fast-4"
+            displayName: "Grok Fast 4"
+            contextSize: 131072
+            maxOutputTokens: 8192
+      titleConvo: true
+      titleModel: "grok-fast-4"
+      dropParams: ["stop", "user", "frequency_penalty", "presence_penalty"]
+
+    # === OPENROUTER ===
     - name: "OpenRouter"
-      apiKey: "${OPENROUTER_KEY}"
+      apiKey: "${OPENROUTER_API_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
       models:
-        default: 
-          - "openai/gpt-4o"
-          - "openai/o1"
-          - "google/gemini-2.0-flash-001"
-          - "anthropic/claude-3.5-sonnet"
-          - "x-ai/grok-2-1212"
-        fetch: false
+        default: ["anthropic/claude-sonnet-4-20250514"]
+        fetch: true
       titleConvo: true
-      titleModel: "current_model"
-      dropParams: ["stop", "user"]
+      titleModel: "anthropic/claude-sonnet-4-20250514"
 
-    - name: "Featherless"
-      apiKey: "${FEATHERLESS_API_KEY}"
-      baseURL: "https://api.featherless.ai/v1"
-      models:
-        default: 
-          - "deepseek-ai/DeepSeek-R1"
-          - "huihui-ai/Llama-3.3-70B-Instruct-abliterated"
-          - "moonshotai/Kimi-K2.5"
-          - "Qwen/Qwen2.5-72B-Instruct"
-          - "Sao10K/L3.3-70B-Euryale-v2.3"
-          - "cognitivecomputations/dolphin-2.9.2-qwen2-72b"
-          - "NousResearch/Hermes-3-Llama-3.1-70B"
-          - "mistralai/Mistral-Large-Instruct-2407"
-          - "nvidia/Llama-3.1-Nemotron-70B-Instruct"
-          - "microsoft/Phi-4"
-          - "Qwen/Qwen2.5-Coder-32B-Instruct"
-        fetch: false
-      titleConvo: true
-      titleModel: "current_model"
-      dropParams: ["stop", "user"]
+tools:
+  tavily_search:
+    apiKey: "${TAVILY_API_KEY}"
+    enabled: true
+  
+  google_search:
+    apiKey: "${GOOGLE_CLOUD_API_KEY}"
+    searchEngineId: "${GOOGLE_CSE_ID}"
+    enabled: true
