@@ -12,7 +12,7 @@ interface:
 
 # --- MODEL SPECS (Clean UI + Search Pre-loaded) ---
 modelSpecs:
-  enforce: false
+  enforce: false # Keeps Pinning working
   prioritize: true
   list:
     - name: "kimi-k2p5-fast"
@@ -57,6 +57,11 @@ registration:
   allowedEmails: ["${ADMIN_EMAIL}"]
 
 endpoints:
+  # --- CRITICAL FIX: Wakes up the Tool System ---
+  plugins:
+    titleConvo: true
+    titleModel: "current_model"
+
   custom:
     # 1. FIREWORKS (Speed & Kimi)
     - name: "Fireworks"
@@ -68,6 +73,7 @@ endpoints:
       actions: ["tavily_search"]
       customParams:
         defaultParamsEndpoint: "openAI"
+      dropParams: ["stop", "user"] # Unlocks sliders
       titleConvo: true
 
     # 2. OPENROUTER (Backups)
@@ -80,6 +86,7 @@ endpoints:
       actions: ["tavily_search"]
       customParams:
         defaultParamsEndpoint: "openAI"
+      dropParams: ["stop", "user"] # Unlocks sliders
       titleConvo: true
 
     # 3. FEATHERLESS (The "Bangkok Elite" List)
@@ -87,39 +94,40 @@ endpoints:
       apiKey: "${FEATHERLESS_API_KEY}"
       baseURL: "https://api.featherless.ai/v1"
       models:
-        # We TURNED OFF fetch to fix the hanging
         fetch: false 
         default: 
-          # --- REASONING & LOGIC (Visa, Taxes, Budgets) ---
-          - "deepseek-ai/DeepSeek-R1" # Best open source reasoning
-          - "Qwen/Qwen2.5-72B-Instruct" # Best for Thai Language & Multilingual Logic
-          - "moonshotai/Kimi-K2.5" # The Agentic King (If available)
+          # --- REASONING & LOGIC ---
+          - "deepseek-ai/DeepSeek-R1"
+          - "Qwen/Qwen2.5-72B-Instruct"
+          - "moonshotai/Kimi-K2.5"
           
-          # --- UNCENSORED / "REAL TALK" (Nightlife, Safety, Reviews) ---
-          - "huihui-ai/Llama-3.3-70B-Instruct-abliterated" # Your main "no lecture" model
-          - "cognitivecomputations/dolphin-2.9.2-qwen2-72b" # Uncensored Logic (Smart + Raw)
+          # --- UNCENSORED / REAL TALK ---
+          - "huihui-ai/Llama-3.3-70B-Instruct-abliterated"
+          - "cognitivecomputations/dolphin-2.9.2-qwen2-72b"
           
-          # --- CREATIVE WRITING & ROLEPLAY (Vibe drafting) ---
-          - "Sao10K/L3.3-70B-Euryale-v2.3" # The absolute best for story/roleplay
-          - "NousResearch/Hermes-3-Llama-3.1-70B" # Great personality, less robotic
+          # --- CREATIVE WRITING ---
+          - "Sao10K/L3.3-70B-Euryale-v2.3"
+          - "NousResearch/Hermes-3-Llama-3.1-70B"
           
-          # --- WRITING & STYLE (Landlord Emails) ---
-          - "mistralai/Mistral-Large-Instruct-2407" # Professional, European tone
-          - "nvidia/Llama-3.1-Nemotron-70B-Instruct" # Highly structured output
+          # --- STYLE ---
+          - "mistralai/Mistral-Large-Instruct-2407"
+          - "nvidia/Llama-3.1-Nemotron-70B-Instruct"
           
           # --- UTILITY ---
-          - "microsoft/Phi-4" # Fast checks
-          - "Qwen/Qwen2.5-Coder-32B-Instruct" # Coding scripts
+          - "microsoft/Phi-4"
+          - "Qwen/Qwen2.5-Coder-32B-Instruct"
       
       actions: ["tavily_search"]
       customParams:
         defaultParamsEndpoint: "openAI"
+      dropParams: ["stop", "user"] # Unlocks sliders
       titleConvo: true
 
-    # 4. TAVILY TOOL (Hidden)
+    # 4. TAVILY (Tool Source)
     - name: "Tavily"
       apiKey: "${TAVILY_API_KEY}"
       baseURL: "https://api.tavily.com"
       models:
         default: ["tavily_search"]
-      isCompanion: true
+      isCompanion: true 
+      titleConvo: false
