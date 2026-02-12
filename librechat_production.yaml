@@ -1,4 +1,5 @@
-version: "1.3.3"
+#Claude Fix 1
+version: "1.3.3" 
 cache: true
 
 # --- INTERFACE ---
@@ -11,12 +12,10 @@ interface:
   sidePanel: true
   bookmarks: true
 
-# --- MODEL SPECS (The Fix is Here) ---
+# --- MODEL SPECS ---
 modelSpecs:
-  enforce: false # Set to false so standard endpoints aren't blocked
-  prioritize: true
-  # CRITICAL FIX: This line brings back your custom endpoint menus
-  addedEndpoints: ["Fireworks", "OpenRouter", "Featherless"]
+  enforce: false
+  prioritize: false
   list:
     - name: "kimi-k2p5-fast"
       label: "Kimi K2.5 (High-Speed Agent)"
@@ -25,16 +24,16 @@ modelSpecs:
       preset:
         endpoint: "Fireworks"
         model: "accounts/fireworks/models/kimi-k2p5"
-        tools: ["tavily_search"]
-
-    - name: "gpt-5-pro"
-      label: "GPT-5.2 Pro (Deep Reasoning)"
+      tools: ["tavily_search"]
+      
+    - name: "gpt-5-reasoning"
+      label: "GPT-5 (Reasoning Mode)"
       endpoint: "OpenRouter"
-      model: "openai/gpt-5.2-pro"
+      model: "openai/gpt-5"
       preset:
         endpoint: "OpenRouter"
-        model: "openai/gpt-5.2-pro"
-        tools: ["tavily_search"]
+        model: "openai/gpt-5"
+      tools: ["tavily_search"]
 
 # --- FILE CONFIG ---
 fileConfig:
@@ -46,6 +45,7 @@ fileConfig:
         - "text/.*"
       fileLimit: 25485760
 
+# --- REGISTRATION ---
 registration:
   registrationEnabled: false
   socialLogins: ["discord", "github", "google"]
@@ -57,6 +57,92 @@ endpoints:
     titleConvo: true
     titleModel: "current_model"
 
+  # === NATIVE PROVIDERS (REAL LATEST MODELS) ===
+  
+  # OPENAI - Actual models as of Feb 2025
+  openAI:
+    apiKey: "${OPENAI_API_KEY}"
+    models:
+      fetch: false
+      default:
+        # GPT-5 family (released Aug 2025)
+        - "gpt-5"
+        - "gpt-5.2"
+        # GPT-4.1 family (2025 releases)
+        - "gpt-4.1"
+        - "gpt-4.1-mini"
+        - "gpt-4.1-nano"
+        # GPT-4o family (flagship until GPT-5)
+        - "gpt-4o"
+        - "gpt-4o-2024-11-20"
+        - "gpt-4o-mini"
+        - "gpt-4o-mini-2024-07-18"
+        # O-series reasoning models
+        - "o4-mini"
+        - "o4-mini-high"
+        - "o3"
+        - "o3-mini"
+        - "o1"
+        - "o1-mini"
+        - "o1-pro"
+        # Legacy
+        - "gpt-4-turbo"
+    # ENABLE WEB SEARCH
+    addParams:
+      tools: ["web_search"]
+    titleConvo: true
+    titleModel: "gpt-4o-mini"
+    
+  # ANTHROPIC - Real Claude 4.6 just released!
+  anthropic:
+    apiKey: "${ANTHROPIC_API_KEY}"
+    models:
+      fetch: false
+      default:
+        # Claude 4.6 (Feb 5, 2026 - JUST RELEASED!)
+        - "claude-opus-4-6-20260205"
+        # Claude 4.5 family (Nov 2025)
+        - "claude-opus-4-5-20251124"
+        - "claude-sonnet-4-5-20250929"
+        - "claude-haiku-4-5-20251001"
+        # Claude 4.1 (earlier 2025)
+        - "claude-opus-4-1"
+        # Claude 3.5 (still excellent)
+        - "claude-3-5-sonnet-20241022"
+        - "claude-3-5-haiku-20241022"
+    titleConvo: true
+    titleModel: "claude-3-5-haiku-20241022"
+    
+  # GOOGLE - Real Gemini 3 just launched!
+  google:
+    apiKey: "${GOOGLE_API_KEY}"
+    models:
+      fetch: false
+      default:
+        # Gemini 3 family (Nov/Dec 2025 - LATEST!)
+        - "gemini-3-pro"
+        - "gemini-3-flash"
+        - "gemini-3-deep-think"
+        # Gemini 2.5 family (mid-2025)
+        - "gemini-2.5-pro"
+        - "gemini-2.5-flash"
+        - "gemini-2.5-flash-lite"
+        # Gemini 2.0 family (Feb 2025)
+        - "gemini-2.0-pro-exp"
+        - "gemini-2.0-flash"
+        - "gemini-2.0-flash-lite"
+        - "gemini-2.0-flash-thinking-exp"
+        # Gemini 1.5 (stable)
+        - "gemini-1.5-pro-latest"
+        - "gemini-1.5-flash-latest"
+    # ENABLE WEB SEARCH
+    addParams:
+      tools: ["web_search"]
+    titleConvo: true
+    titleModel: "gemini-3-flash"
+
+  # === CUSTOM PROVIDERS ===
+  
   custom:
     # 1. FIREWORKS
     - name: "Fireworks"
@@ -68,33 +154,43 @@ endpoints:
           - "accounts/fireworks/models/kimi-k2p5"
           - "accounts/fireworks/models/llama-v3p3-70b-instruct"
           - "accounts/fireworks/models/qwen2p5-72b-instruct"
-      actions: ["tavily_search"]
-      customParams:
-        defaultParamsEndpoint: "openAI"
-      dropParams: ["stop", "user"]
+      addParams:
+        tools: ["tavily_search"]
       titleConvo: true
-
+      titleModel: "current_model"
+      dropParams: ["stop", "user"]
+      
     # 2. OPENROUTER
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
       models:
         fetch: false 
-        default: 
+        default:
+          # OpenAI models on OpenRouter
+          - "openai/gpt-5"
           - "openai/gpt-5.2"
-          - "openai/gpt-5.2-pro"
-          - "anthropic/claude-4.6-opus"
-          - "anthropic/claude-4.5-sonnet"
-          - "google/gemini-3-pro-preview"
-          - "google/gemini-3-flash-preview"
+          - "openai/gpt-4.1"
+          - "openai/o3"
+          - "openai/o4-mini"
+          # Anthropic models on OpenRouter
+          - "anthropic/claude-opus-4-6"
+          - "anthropic/claude-opus-4-5"
+          - "anthropic/claude-sonnet-4-5"
+          # Google models on OpenRouter
+          - "google/gemini-3-pro"
+          - "google/gemini-3-flash"
+          - "google/gemini-2.5-pro"
+          # Other providers
           - "moonshotai/kimi-k2.5"
-          - "qwen/qwen3-max-thinking"
-      actions: ["tavily_search"]
-      customParams:
-        defaultParamsEndpoint: "openAI"
-      dropParams: ["stop", "user"]
+          - "qwen/qwen3-max"
+          - "deepseek/deepseek-r1"
+      addParams:
+        tools: ["tavily_search"]
       titleConvo: true
-
+      titleModel: "current_model"
+      dropParams: ["stop", "user"]
+      
     # 3. FEATHERLESS
     - name: "Featherless"
       apiKey: "${FEATHERLESS_API_KEY}"
@@ -106,12 +202,12 @@ endpoints:
           - "deepseek-ai/DeepSeek-R1"
           - "huihui-ai/Llama-3.3-70B-Instruct-abliterated"
           - "Qwen/Qwen2.5-72B-Instruct"
-      actions: ["tavily_search"]
-      customParams:
-        defaultParamsEndpoint: "openAI"
-      dropParams: ["stop", "user"]
+      addParams:
+        tools: ["tavily_search"]
       titleConvo: true
-
+      titleModel: "current_model"
+      dropParams: ["stop", "user"]
+      
     # 4. TAVILY
     - name: "Tavily"
       apiKey: "${TAVILY_API_KEY}"
