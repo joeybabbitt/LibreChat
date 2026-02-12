@@ -1,7 +1,6 @@
 version: "1.3.3"
 cache: true
 
-# --- INTERFACE ---
 interface:
   agents: true
   prompts: true
@@ -11,32 +10,6 @@ interface:
   sidePanel: true
   bookmarks: true
 
-# --- MODEL SPECS (Sidebar Fix) ---
-modelSpecs:
-  enforce: false # Set to false so standard menus aren't blocked
-  prioritize: true
-  # CRITICAL FIX: Add this block to prevent providers from disappearing
-  addedEndpoints: ["Fireworks", "OpenRouter", "Featherless"]
-  list:
-    - name: "kimi-k2.5-agent"
-      label: "Kimi K2.5 (High-Speed Agent)"
-      endpoint: "Featherless" 
-      model: "moonshotai/Kimi-K2.5"
-      preset:
-        endpoint: "Featherless"
-        model: "moonshotai/Kimi-K2.5"
-        tools: ["tavily_search"]
-
-    - name: "gpt-5-pro-agent"
-      label: "GPT-5.2 Pro (Frontier Agent)"
-      endpoint: "OpenRouter"
-      model: "openai/gpt-5.2-pro"
-      preset:
-        endpoint: "OpenRouter"
-        model: "openai/gpt-5.2-pro"
-        tools: ["tavily_search"]
-
-# --- FILE CONFIG ---
 fileConfig:
   endpoints:
     default:
@@ -51,65 +24,54 @@ registration:
   socialLogins: ["discord", "github", "google"]
   allowedEmails: ["${ADMIN_EMAIL}"]
 
-# --- ENDPOINTS ---
 endpoints:
-  plugins:
-    titleConvo: true
-    titleModel: "current_model"
-
   custom:
-    # 1. FIREWORKS
     - name: "Fireworks"
       apiKey: "${FIREWORKS_API_KEY}"
       baseURL: "https://api.fireworks.ai/inference/v1"
       models:
-        fetch: false 
         default: 
           - "accounts/fireworks/models/kimi-k2p5"
           - "accounts/fireworks/models/llama-v3p3-70b-instruct"
-      actions: ["tavily_search"]
-      customParams:
-        defaultParamsEndpoint: "openAI"
-      dropParams: ["stop", "user"]
+          - "accounts/fireworks/models/qwen2p5-72b-instruct"
+          - "accounts/fireworks/models/deepseek-v3"
+        fetch: false
       titleConvo: true
+      titleModel: "current_model"
+      dropParams: ["stop", "user"]
 
-    # 2. OPENROUTER
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
       models:
-        fetch: false 
         default: 
-          - "openai/gpt-5.2-pro"
-          - "anthropic/claude-4.6-opus"
-          - "google/gemini-3-pro-preview"
-      actions: ["tavily_search"]
-      customParams:
-        defaultParamsEndpoint: "openAI"
-      dropParams: ["stop", "user"]
+          - "openai/gpt-4o"
+          - "openai/o1"
+          - "google/gemini-2.0-flash-001"
+          - "anthropic/claude-3.5-sonnet"
+          - "x-ai/grok-2-1212"
+        fetch: true
       titleConvo: true
+      titleModel: "current_model"
+      dropParams: ["stop", "user"]
 
-    # 3. FEATHERLESS (Agent-Corrected)
     - name: "Featherless"
       apiKey: "${FEATHERLESS_API_KEY}"
-      baseURL: "https://api.featherless.ai/v1/chat/completions"
-      directEndpoint: true 
-      provider: "openai" # Essential for Agent Tool support
+      baseURL: "https://api.featherless.ai/v1"
       models:
-        fetch: false 
         default: 
-          - "moonshotai/Kimi-K2.5"
           - "deepseek-ai/DeepSeek-R1"
-      actions: ["tavily_search"]
-      customParams:
-        defaultParamsEndpoint: "openAI"
-      dropParams: ["stop", "user"]
+          - "huihui-ai/Llama-3.3-70B-Instruct-abliterated"
+          - "moonshotai/Kimi-K2.5"
+          - "Qwen/Qwen2.5-72B-Instruct"
+          - "Sao10K/L3.3-70B-Euryale-v2.3"
+          - "cognitivecomputations/dolphin-2.9.2-qwen2-72b"
+          - "NousResearch/Hermes-3-Llama-3.1-70B"
+          - "mistralai/Mistral-Large-Instruct-2407"
+          - "nvidia/Llama-3.1-Nemotron-70B-Instruct"
+          - "microsoft/Phi-4"
+          - "Qwen/Qwen2.5-Coder-32B-Instruct"
+        fetch: false
       titleConvo: true
-
-    # 4. TAVILY
-    - name: "Tavily"
-      apiKey: "${TAVILY_API_KEY}"
-      baseURL: "https://api.tavily.com"
-      models:
-        default: ["tavily_search"]
-      isCompanion: true
+      titleModel: "current_model"
+      dropParams: ["stop", "user"]
