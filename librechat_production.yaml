@@ -58,6 +58,7 @@ endpoints:
     - name: "Featherless"
       apiKey: "${FEATHERLESS_API_KEY}"
       baseURL: "https://api.featherless.ai/v1"
+      directEndpoint: true
       models:
         default: 
           - "deepseek-ai/DeepSeek-R1"
