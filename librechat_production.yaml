@@ -11,11 +11,11 @@ interface:
   sidePanel: true
   bookmarks: true
 
-# --- MODEL SPECS (The "Elite" Picker) ---
+# --- MODEL SPECS (Sidebar Fix) ---
 modelSpecs:
-  enforce: false
+  enforce: false # Set to false so standard menus aren't blocked
   prioritize: true
-  # CRITICAL: This line brings back your provider menus next to the specs
+  # CRITICAL FIX: Add this block to prevent providers from disappearing
   addedEndpoints: ["Fireworks", "OpenRouter", "Featherless"]
   list:
     - name: "kimi-k2.5-agent"
@@ -36,15 +36,6 @@ modelSpecs:
         model: "openai/gpt-5.2-pro"
         tools: ["tavily_search"]
 
-    - name: "deepseek-r1-logic"
-      label: "DeepSeek R1 (Visa/Logic Agent)"
-      endpoint: "Featherless" 
-      model: "deepseek-ai/DeepSeek-R1"
-      preset:
-        endpoint: "Featherless"
-        model: "deepseek-ai/DeepSeek-R1"
-        tools: ["tavily_search"]
-
 # --- FILE CONFIG ---
 fileConfig:
   endpoints:
@@ -62,13 +53,12 @@ registration:
 
 # --- ENDPOINTS ---
 endpoints:
-  # Wakes up the Tool/Wrench system globally
   plugins:
     titleConvo: true
     titleModel: "current_model"
 
   custom:
-    # 1. FIREWORKS (Native Speed)
+    # 1. FIREWORKS
     - name: "Fireworks"
       apiKey: "${FIREWORKS_API_KEY}"
       baseURL: "https://api.fireworks.ai/inference/v1"
@@ -77,63 +67,46 @@ endpoints:
         default: 
           - "accounts/fireworks/models/kimi-k2p5"
           - "accounts/fireworks/models/llama-v3p3-70b-instruct"
-          - "accounts/fireworks/models/qwen2p5-72b-instruct"
-          - "accounts/fireworks/models/deepseek-v3"
       actions: ["tavily_search"]
       customParams:
         defaultParamsEndpoint: "openAI"
       dropParams: ["stop", "user"]
       titleConvo: true
 
-    # 2. OPENROUTER (2026 Frontier List - Fetch OFF for speed)
+    # 2. OPENROUTER
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
       models:
         fetch: false 
         default: 
-          # --- USA Frontier ---
-          - "openai/gpt-5.2"
           - "openai/gpt-5.2-pro"
-          - "openai/gpt-oss-120b"
           - "anthropic/claude-4.6-opus"
-          - "anthropic/claude-4.5-sonnet"
           - "google/gemini-3-pro-preview"
-          - "google/gemini-3-flash-preview"
-          # --- China Frontier ---
-          - "moonshotai/kimi-k2.5"
-          - "qwen/qwen3-max-thinking"
-          - "deepseek/deepseek-v3.2"
-          - "zhipu/glm-5"
       actions: ["tavily_search"]
       customParams:
         defaultParamsEndpoint: "openAI"
       dropParams: ["stop", "user"]
       titleConvo: true
 
-    # 3. FEATHERLESS (Expert Agent-Fixed)
+    # 3. FEATHERLESS (Agent-Corrected)
     - name: "Featherless"
       apiKey: "${FEATHERLESS_API_KEY}"
-      # FIX: Full path + directEndpoint ensures Agents don't 404
       baseURL: "https://api.featherless.ai/v1/chat/completions"
       directEndpoint: true 
-      # FIX: Forces the Agent backend to treat this as standard OpenAI
-      provider: "openai" 
+      provider: "openai" # Essential for Agent Tool support
       models:
         fetch: false 
         default: 
           - "moonshotai/Kimi-K2.5"
           - "deepseek-ai/DeepSeek-R1"
-          - "huihui-ai/Llama-3.3-70B-Instruct-abliterated"
-          - "Qwen/Qwen2.5-72B-Instruct"
-          - "Sao10K/L3.3-70B-Euryale-v2.3"
       actions: ["tavily_search"]
       customParams:
         defaultParamsEndpoint: "openAI"
       dropParams: ["stop", "user"]
       titleConvo: true
 
-    # 4. TAVILY (Tool Provider)
+    # 4. TAVILY
     - name: "Tavily"
       apiKey: "${TAVILY_API_KEY}"
       baseURL: "https://api.tavily.com"
