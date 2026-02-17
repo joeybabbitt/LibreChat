@@ -11,14 +11,12 @@ interface:
   sidePanel: true
   bookmarks: true
 
-# --- MODEL SPECS (The "Elite" Picker) ---
+# --- MODEL SPECS ---
 modelSpecs:
   enforce: false
   prioritize: true
-  # CRITICAL: Shows full provider menus next to your elite specs
-  addedEndpoints: ["Fireworks", "OpenRouter"]
   list:
-    # --- NEW: CLAUDE 4.5 SONNET (OpenRouter) ---
+    # --- CLAUDE 4.5 SONNET (OpenRouter) ---
     - name: "sonnet-4.5-agent"
       label: "Claude 4.5 Sonnet (Agentic Workhorse)"
       endpoint: "OpenRouter"
@@ -27,8 +25,7 @@ modelSpecs:
         endpoint: "OpenRouter"
         model: "anthropic/claude-sonnet-4.5"
         tools: ["tavily_search"]
-
-    # --- NEW: GEMINI 3 FLASH (OpenRouter) ---
+    # --- GEMINI 3 FLASH (OpenRouter) ---
     - name: "gemini-3-flash-agent"
       label: "Gemini 3 Flash (1M Token Agent)"
       endpoint: "OpenRouter"
@@ -37,11 +34,10 @@ modelSpecs:
         endpoint: "OpenRouter"
         model: "google/gemini-3-flash-preview"
         tools: ["tavily_search"]
-
     # --- KIMI K2.5 (Fireworks) ---
     - name: "kimi-k2.5-fast"
       label: "Kimi K2.5 (High-Speed Agent)"
-      endpoint: "Fireworks" 
+      endpoint: "Fireworks"
       model: "accounts/fireworks/models/kimi-k2p5"
       preset:
         endpoint: "Fireworks"
@@ -65,42 +61,35 @@ registration:
 
 # --- ENDPOINTS ---
 endpoints:
-  # Wakes up the Tool/Wrench system globally
-  plugins:
-    titleConvo: true
-    titleModel: "current_model"
-
   custom:
-    # 1. FIREWORKS (The Fast Path)
+    # 1. FIREWORKS
     - name: "Fireworks"
       apiKey: "${FIREWORKS_API_KEY}"
       baseURL: "https://api.fireworks.ai/inference/v1"
       models:
-        fetch: false 
-        default: 
+        fetch: false
+        default:
           - "accounts/fireworks/models/kimi-k2p5"
           - "accounts/fireworks/models/llama-v3p3-70b-instruct"
           - "accounts/fireworks/models/qwen2p5-72b-instruct"
-      actions: ["tavily_search"]
-      customParams:
-        defaultParamsEndpoint: "openAI"
-      dropParams: ["stop", "user"]
       titleConvo: true
+      titleModel: "current_model"
+      dropParams: ["stop", "user"]
 
-    # 2. OPENROUTER (February 2026 Frontier List)
+    # 2. OPENROUTER
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
       models:
-        fetch: false # Keeps the Railway build lightning fast
-        default: 
-          # --- NEW: 2026 FLAGSHIPS ---
+        fetch: false
+        default:
+          # --- 2026 FLAGSHIPS ---
           - "anthropic/claude-sonnet-4.5"
           - "google/gemini-3-flash-preview"
           - "google/gemini-3-pro-preview"
           - "openai/gpt-5.2-pro"
           - "anthropic/claude-4.6-opus"
-          # --- QWEN 3.5 SERIES (Released Feb 16, 2026) ---
+          # --- QWEN 3.5 SERIES ---
           - "qwen/qwen-3.5-plus"
           - "qwen/qwen-3.5-397b-a17b"
           # --- OTHERS ---
@@ -108,13 +97,11 @@ endpoints:
           - "meta-llama/llama-4-70b-instruct"
           - "moonshotai/kimi-k2.5"
           - "x-ai/grok-2-1212"
-      actions: ["tavily_search"]
-      customParams:
-        defaultParamsEndpoint: "openAI"
-      dropParams: ["stop", "user"]
       titleConvo: true
+      titleModel: "current_model"
+      dropParams: ["stop", "user"]
 
-    # 3. TAVILY (The Browser Tool)
+    # 3. TAVILY
     - name: "Tavily"
       apiKey: "${TAVILY_API_KEY}"
       baseURL: "https://api.tavily.com"
