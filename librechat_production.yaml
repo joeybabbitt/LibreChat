@@ -15,8 +15,6 @@ interface:
 modelSpecs:
   enforce: false
   prioritize: true
-  # CRITICAL FIX: Keeps your OpenRouter and Fireworks menus visible in the sidebar
-  addedEndpoints: ["Fireworks", "OpenRouter"]
   list:
     # --- CLAUDE 4.5 SONNET (OpenRouter) ---
     - name: "sonnet-4.5-agent"
@@ -68,17 +66,12 @@ endpoints:
     - name: "Fireworks"
       apiKey: "${FIREWORKS_API_KEY}"
       baseURL: "https://api.fireworks.ai/inference/v1"
-      provider: "openai" # FIX: Forces Kimi to use standard tool calling
-      plugins: true # FIX: Unlocks agent access
       models:
         fetch: false
         default:
           - "accounts/fireworks/models/kimi-k2p5"
           - "accounts/fireworks/models/llama-v3p3-70b-instruct"
           - "accounts/fireworks/models/qwen2p5-72b-instruct"
-      actions: ["tavily_search"] # FIX: Registers tool access
-      customParams:
-        defaultParamsEndpoint: "openAI" # FIX: Formats tool payload correctly
       titleConvo: true
       titleModel: "current_model"
       dropParams: ["stop", "user"]
@@ -87,8 +80,6 @@ endpoints:
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
-      provider: "openai" # FIX: Stops Claude from outputting raw XML text
-      plugins: true # FIX: Unlocks agent access
       models:
         fetch: false
         default:
@@ -103,4 +94,17 @@ endpoints:
           - "qwen/qwen3.5-plus-02-15"
           # --- OTHERS ---
           - "openai/gpt-oss-120b"
-          - "meta-llama/llama
+          - "meta-llama/llama-3.3-70b-instruct"
+          - "moonshotai/kimi-k2.5"
+          - "x-ai/grok-4.1-fast"
+      titleConvo: true
+      titleModel: "current_model"
+      dropParams: ["stop", "user"]
+
+    # 3. TAVILY
+    - name: "Tavily"
+      apiKey: "${TAVILY_API_KEY}"
+      baseURL: "https://api.tavily.com"
+      models:
+        default: ["tavily_search"]
+      isCompanion: true
