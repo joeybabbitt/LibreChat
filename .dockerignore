@@ -5,13 +5,12 @@
 **/.DS_Store
 **/.vscode
 **/node_modules
-
 # Specific patterns to ignore
 data-node
 meili_data*
 librechat*
+!librechat_production.yaml
 Dockerfile*
 docs
-
 # Ignore all hidden files
 .*
