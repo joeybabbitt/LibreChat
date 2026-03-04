@@ -1,27 +1,37 @@
-# v0.8.3-rc2
-
-# Base node image
+# v0.8.3-rc2 + custom Railway config
 FROM node:20-alpine AS node
 
-# Install jemalloc
-RUN apk add --no-cache jemalloc
-RUN apk add --no-cache python3 py3-pip uv
-
-# Set environment variable to use jemalloc
+# 1. Performance & MCP Tools
+RUN apk add --no-cache jemalloc python3 py3-pip
 ENV LD_PRELOAD=/usr/lib/libjemalloc.so.2
-
-# Add `uv` for extended MCP support
 COPY --from=ghcr.io/astral-sh/uv:0.9.5-python3.12-alpine /usr/local/bin/uv /usr/local/bin/uvx /bin/
 RUN uv --version
 
-# Set configurable max-old-space-size with default
+# Build-time memory for frontend compile
 ARG NODE_MAX_OLD_SPACE_SIZE=6144
 
+USER root
 RUN mkdir -p /app && chown node:node /app
 WORKDIR /app
 
+# 2. Create Persistent Folder Structure (before symlinking)
+RUN mkdir -p /app/data/images \
+             /app/data/uploads \
+             /app/client/public \
+             /app/logs
+
+# 3. Symlinks for Railway volume
+RUN ln -s /app/data/images /app/client/public/images && \
+    ln -s /app/data/uploads /app/uploads
+
+# 4. Fix violations.json crash
+RUN touch /app/data/violations.json && \
+    chmod 777 /app/data/violations.json && \
+    chown -R node:node /app/data /app/client/public/images /app/uploads
+
 USER node
 
+# 5. Install dependencies
 COPY --chown=node:node package.json package-lock.json ./
 COPY --chown=node:node api/package.json ./api/package.json
 COPY --chown=node:node client/package.json ./client/package.json
@@ -30,9 +40,7 @@ COPY --chown=node:node packages/data-schemas/package.json ./packages/data-schema
 COPY --chown=node:node packages/api/package.json ./packages/api/package.json
 
 RUN \
-    # Allow mounting of these files, which have no default
     touch .env ; \
-    # Create directories for the volumes to inherit the correct permissions
     mkdir -p /app/client/public/images /app/logs /app/uploads ; \
     npm config set fetch-retry-maxtimeout 600000 ; \
     npm config set fetch-retries 5 ; \
@@ -42,19 +50,15 @@ RUN \
 COPY --chown=node:node . .
 
 RUN \
-    # React client build with configurable memory
     NODE_OPTIONS="--max-old-space-size=${NODE_MAX_OLD_SPACE_SIZE}" npm run frontend; \
     npm prune --production; \
     npm cache clean --force
 
-# Node API setup
+# 6. Apply your config
+COPY --chown=node:node librechat_production.yaml ./librechat.yaml
+
 EXPOSE 3080
 ENV HOST=0.0.0.0
-CMD ["npm", "run", "backend"]
 
-# Optional: for client with nginx routing
-# FROM nginx:stable-alpine AS nginx-client
-# WORKDIR /usr/share/nginx/html
-# COPY --from=node /app/client/dist /usr/share/nginx/html
-# COPY client/nginx.conf /etc/nginx/conf.d/default.conf
-# ENTRYPOINT ["nginx", "-g", "daemon off;"]
+# 7. Migrations + start
+CMD ["sh", "-c", "chown -R node:node /app/data && npm run migrate:agent-permissions && npm run migrate:prompt-permissions && npm run backend"]
