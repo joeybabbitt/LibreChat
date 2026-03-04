@@ -1,4 +1,4 @@
-# v0.8.3-rc2 + custom Railway config
+# v0.8.3-rc1 + custom Railway config
 FROM node:20-alpine AS node
 
 # 1. Performance & MCP Tools
@@ -7,31 +7,31 @@ ENV LD_PRELOAD=/usr/lib/libjemalloc.so.2
 COPY --from=ghcr.io/astral-sh/uv:0.9.5-python3.12-alpine /usr/local/bin/uv /usr/local/bin/uvx /bin/
 RUN uv --version
 
-# Build-time memory for frontend compile
 ARG NODE_MAX_OLD_SPACE_SIZE=6144
 
+# 2. Create /app as root, then hand it to node
 USER root
 RUN mkdir -p /app && chown node:node /app
 WORKDIR /app
 
-# 2. Create Persistent Folder Structure (before symlinking)
+# 3. Create Persistent Folder Structure
 RUN mkdir -p /app/data/images \
              /app/data/uploads \
              /app/client/public \
              /app/logs
 
-# 3. Symlinks for Railway volume
+# 4. Symlinks for Railway volume
 RUN ln -s /app/data/images /app/client/public/images && \
     ln -s /app/data/uploads /app/uploads
 
-# 4. Fix violations.json crash
+# 5. Fix violations.json crash + chown ALL of /app
 RUN touch /app/data/violations.json && \
     chmod 777 /app/data/violations.json && \
-    chown -R node:node /app/data /app/client/public/images /app/uploads
+    chown -R node:node /app
 
 USER node
 
-# 5. Install dependencies
+# 6. Install dependencies
 COPY --chown=node:node package.json package-lock.json ./
 COPY --chown=node:node api/package.json ./api/package.json
 COPY --chown=node:node client/package.json ./client/package.json
@@ -54,11 +54,11 @@ RUN \
     npm prune --production; \
     npm cache clean --force
 
-# 6. Apply your config
+# 7. Apply your config
 COPY --chown=node:node librechat_production.yaml ./librechat.yaml
 
 EXPOSE 3080
 ENV HOST=0.0.0.0
 
-# 7. Migrations + start
+# 8. Migrations + start
 CMD ["sh", "-c", "chown -R node:node /app/data && npm run migrate:agent-permissions && npm run migrate:prompt-permissions && npm run backend"]
