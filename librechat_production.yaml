@@ -142,10 +142,11 @@ endpoints:
           - "x-ai/grok-4.20-multi-agent-beta"
           - "x-ai/grok-4.1-fast"
           # --- Xiaomi MiMo ---
+          - "xiaomi/mimo-v2.5-pro"
+          - "xiaomi/mimo-v2.5"
           - "xiaomi/mimo-v2-pro"
           - "xiaomi/mimo-v2-omni"
           - "xiaomi/mimo-v2-flash"              # new — 309B MoE, 256K ctx, #1 OSS SWE-bench
-          - "xiaomi/mimo-v2-flash:free"          # new — MiMo V2 Flash free tier
           # --- Mistral ---
           - "mistralai/mistral-small-2603"
           # --- Qwen ---
@@ -157,6 +158,7 @@ endpoints:
           - "moonshotai/kimi-k2.5"
           - "moonshotai/kimi-k2.6"
           - "deepseek/deepseek-v3.2"
+          - "inclusionai/ling-2.6-flash:free"
       titleConvo: true
       titleModel: "current_model"
       dropParams: ["stop", "user"]
