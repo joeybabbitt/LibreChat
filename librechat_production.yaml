@@ -158,6 +158,8 @@ endpoints:
           - "moonshotai/kimi-k2.5"
           - "moonshotai/kimi-k2.6"
           - "deepseek/deepseek-v3.2"
+          - "deepseek/deepseek-v4-pro"
+          - "deepseek/deepseek-v4-flash"
           - "inclusionai/ling-2.6-flash:free"
       titleConvo: true
       titleModel: "current_model"
