@@ -105,12 +105,26 @@ endpoints:
       models:
         fetch: false
         default:
-          - "accounts/fireworks/models/kimi-k2p5"
-          - "accounts/fireworks/models/llama-v3p3-70b-instruct"
+          # --- Kimi (Moonshot) ---
+          - "accounts/fireworks/models/kimi-k2p6"           # NEW — Kimi K2.6, 1.1T MoE, Tier A coding, 256K ctx
+          - "accounts/fireworks/models/kimi-k2p5"           # Kimi K2.5, still solid & cheaper
+          # --- DeepSeek ---
+          - "accounts/fireworks/models/deepseek-v4-pro"     # NEW — 1.6T MoE, 1M ctx, live 2026-04-27
+          # NOTE: deepseek-v4-flash not yet confirmed on Fireworks (only V4 Pro banner live);
+          # uncomment once you verify it's available at fireworks.ai/models:
+          # - "accounts/fireworks/models/deepseek-v4-flash"
+          - "accounts/fireworks/models/deepseek-v3p2"       # keep as fallback (cheaper, stable)
+          # --- Qwen ---
+          - "accounts/fireworks/models/qwen3p6-plus"        # NEW — 396B MoE, exclusive to Fireworks outside Alibaba
           - "accounts/fireworks/models/qwen2p5-72b-instruct"
+          # --- MiMo note ---
+          # MiMo V2.5-Pro and MiMo V2.5 are NOT on Fireworks — Xiaomi API + OpenRouter only.
+          # Use OpenRouter endpoint for xiaomi/mimo-v2.5-pro and xiaomi/mimo-v2.5 instead.
+          # --- Meta ---
+          - "accounts/fireworks/models/llama-v3p3-70b-instruct"
       titleConvo: true
       titleModel: "current_model"
-      dropParams: ["stop", "user"]
+      dropParams: ["stop", "user", "frequency_penalty", "presence_penalty"]
 
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
@@ -128,8 +142,8 @@ endpoints:
           # NOTE: gemini-3.1-pro slug unconfirmed at time of merge;
           # check openrouter.ai/google before uncommenting:
           - "google/gemini-3.1-pro-preview"
-          - "google/gemma-4-31b-it"             # new — Gemma 4 31B paid, 256K ctx, multimodal
-          - "google/gemma-4-31b-it:free"         # new — Gemma 4 31B free tier
+          - "google/gemma-4-31b-it"             # Gemma 4 31B paid, 256K ctx, multimodal
+          - "google/gemma-4-31b-it:free"         # Gemma 4 31B free tier
           # --- OpenAI ---
           - "openai/gpt-5.4"
           - "openai/gpt-5.4-mini"
@@ -142,15 +156,15 @@ endpoints:
           - "x-ai/grok-4.20-multi-agent-beta"
           - "x-ai/grok-4.1-fast"
           # --- Xiaomi MiMo ---
-          - "xiaomi/mimo-v2.5-pro"
-          - "xiaomi/mimo-v2.5"
+          - "xiaomi/mimo-v2.5-pro"              # NEW — 1T MoE, 42B active, 1M ctx, frontier agentic coding
+          - "xiaomi/mimo-v2.5"                  # NEW — omnimodal (text/image/video/audio), 1M ctx
           - "xiaomi/mimo-v2-pro"
           - "xiaomi/mimo-v2-omni"
-          - "xiaomi/mimo-v2-flash"              # new — 309B MoE, 256K ctx, #1 OSS SWE-bench
+          - "xiaomi/mimo-v2-flash"
           # --- Mistral ---
           - "mistralai/mistral-small-2603"
           # --- Qwen ---
-          - "qwen/qwen3.6-plus"                 # new — hybrid linear+MoE, 1M ctx, 78.8 SWE-bench
+          - "qwen/qwen3.6-plus"                 # hybrid linear+MoE, 1M ctx, 78.8 SWE-bench
           - "qwen/qwen3.5-397b-a17b"
           - "qwen/qwen3.5-plus-02-15"
           # --- Meta / Moonshot / Deepseek ---
