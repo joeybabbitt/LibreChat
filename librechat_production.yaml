@@ -56,6 +56,16 @@ registration:
   socialLogins: ["discord", "github", "google"]
   # Note: ALLOW_REGISTRATION=false goes in Railway env vars, not here
 
+# --- WEB SEARCH ---
+webSearch:
+  searchProvider: "serper"
+  serperApiKey: "${SERPER_API_KEY}"
+  scraperProvider: "serper"
+  rerankerType: "jina"
+  jinaApiKey: "${JINA_API_KEY}"
+  scraperTimeout: 30000    # bumped from default 7500ms — Serper scraper can be slow on heavy pages
+  safeSearch: 0            # 0 = OFF, 1 = MODERATE (default), 2 = STRICT
+
 # --- MODEL SPECS ---
 modelSpecs:
   enforce: false
@@ -124,7 +134,8 @@ endpoints:
           - "accounts/fireworks/models/llama-v3p3-70b-instruct"
       titleConvo: true
       titleModel: "current_model"
-      dropParams: ["stop", "user", "frequency_penalty", "presence_penalty"]
+      # tool_choice added — Fireworks/Kimi throws UnsupportedParamsError without this
+      dropParams: ["stop", "user", "frequency_penalty", "presence_penalty", "tool_choice"]
 
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
