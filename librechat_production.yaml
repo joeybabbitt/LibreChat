@@ -148,7 +148,7 @@ endpoints:
           - "anthropic/claude-sonnet-4.5"
           - "anthropic/claude-opus-4.6"
           # --- Google ---
-          - "google/gemini-3-flash-preview"
+          - "google/gemini-3.5-flash"
           - "google/gemini-3-pro-preview"
           # NOTE: gemini-3.1-pro slug unconfirmed at time of merge;
           # check openrouter.ai/google before uncommenting:
