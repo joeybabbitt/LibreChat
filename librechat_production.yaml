@@ -45,6 +45,7 @@ actions:
     - "api.tavily.com"
     - "api.fireworks.ai"
     - "openrouter.ai"
+    - "api.deepseek.com"          # added for DeepSeek direct endpoint
 
 # MCP transport domain allowlist — uncomment if adding remote MCP servers
 # mcpSettings:
@@ -137,6 +138,22 @@ endpoints:
       # tool_choice added — Fireworks/Kimi throws UnsupportedParamsError without this
       dropParams: ["stop", "user", "frequency_penalty", "presence_penalty", "tool_choice"]
 
+    - name: "DeepSeek"
+      apiKey: "${DEEPSEEK_API_KEY}"
+      baseURL: "https://api.deepseek.com"
+      models:
+        fetch: false
+        default:
+          - "deepseek-v4-flash"   # 284B MoE, 13B active, 1M ctx — bulk/high-volume default
+          - "deepseek-v4-pro"     # 1.6T MoE, 49B active, 1M ctx — frontier reasoning/agentic
+      titleConvo: true
+      titleModel: "deepseek-v4-flash"
+      modelDisplayLabel: "DeepSeek"
+      # NOTE: DeepSeek direct endpoint returns 400 when tools array is malformed by LibreChat.
+      # Drop all tool/function-call params to prevent deserialization errors (GH discussion #12805).
+      # If you need tool use on DeepSeek direct, route through OpenRouter instead.
+      dropParams: ["stop", "user", "frequency_penalty", "presence_penalty", "tool_choice", "tools"]
+
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
@@ -185,6 +202,7 @@ endpoints:
           - "deepseek/deepseek-v3.2"
           - "deepseek/deepseek-v4-pro"
           - "deepseek/deepseek-v4-flash"
+          - "deepseek/deepseek-v4-flash:free"   # free tier — retry loop acceptable for non-critical tasks
           - "inclusionai/ling-2.6-flash:free"
       titleConvo: true
       titleModel: "current_model"
