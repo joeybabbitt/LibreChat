@@ -225,7 +225,7 @@ endpoints:
           - "deepseek/deepseek-v4-pro"
           - "deepseek/deepseek-v4-flash"
           - "deepseek/deepseek-v4-flash:free"    # free tier — retry loop acceptable for non-critical tasks
-          - "inclusionai/ling-2.6-flash:free"
+          - "z-ai/glm-5.2"
       titleConvo: true
       titleModel: "current_model"
       dropParams: ["stop", "user"]
